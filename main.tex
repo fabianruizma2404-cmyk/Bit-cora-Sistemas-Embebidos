@@ -1,0 +1,564 @@
+% ===================================================================
+% CONFIGURACIÓN DEL DOCUMENTO
+% ===================================================================
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts % Permite usar \thanks en el bloque de autores
+
+% Carga el preámbulo con paquetes y configuraciones comunes
+\input{preamble.tex}
+
+% Definición del comando BibTeX para la bibliografía (estándar de IEEE)
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+  T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% ===================================================================
+% INICIO DEL DOCUMENTO
+% ===================================================================
+\begin{document}
+  % Configuración de los colores para los hipervínculos del PDF
+  % Para revisiones a doble ciego, se recomienda usar 'black' en todos los campos.
+  \hypersetup{citecolor=black, linkcolor=black!80, urlcolor=gray, breaklinks=true}
+
+  % ===================================================================
+  % TÍTULO Y AUTORES
+  % ===================================================================
+  % Edita el título del artículo aquí.
+  \title{Bitácoras Sistemas Embebidos Primer Corte\\\vspace{2pt}}
+
+  % Edita la información de los autores.
+  % Duplica el bloque \IEEEauthorblock para añadir más autores y afiliaciones.
+  % En envíos anónimos (doble ciego), elimina esta sección o anonimiza los datos.
+  \author{
+  \IEEEauthorblockN{Julian Díaz Cortina}
+  \IEEEauthorblockA{\textit{Ingeniería Mecatrónica}\\
+    \textit{Universidad Santo Tomás}\\
+    Bucaramanga, Colombia\\
+    juliandavid.diaz@ustabuca.edu.co}
+  \and
+  \IEEEauthorblockN{Fabian Ruiz Mateus}
+  \IEEEauthorblockA{\textit{Ingeniería Mecatrónica}\\
+    \textit{Universidad Santo Tomás}\\
+    Bucaramanga, Colombia\\
+    fabianaugusto.ruiz@ustabuca.edu.co}
+  }
+
+  % Descomenta la siguiente línea para añadir notas de financiación o agradecimientos en el pie de página del título.
+  % \thanks{Este trabajo fue financiado por la Institución XYZ bajo el proyecto ABC.}
+
+\maketitle
+
+% Ajuste de estilo para mantener la tipografía original de IEEE.
+\renewcommand\sffamily{}
+
+% ===================================================================
+% RESUMEN Y PALABRAS CLAVE
+% ===================================================================
+% El contenido del resumen y las palabras clave se encuentra en 'abstract.tex'.
+\input{section/abstract}
+
+% ===================================================================
+% CUERPO DEL ARTÍCULO
+% ===================================================================
+% Se recomienda organizar cada sección en un archivo .tex separado para mayor claridad.
+% Usa \label{sec:nombre} para crear etiquetas y \ref{sec:nombre} para referenciarlas.
+
+\section{Introducción}\label{sec:introduccion}
+  \input{section/introduction}
+
+% Descomenta la siguiente sección para incluir una revisión del estado del arte.
+% Asegúrate de crear y editar el archivo 'literature.tex'.
+ %\section{Revisión de literatura}\label{sec:literatura}
+  \input{section/literature}
+
+\section{Marco referencial}\label{sec:experimental}
+    \input{section/experimental}
+
+\section{Practicas}\label{sec:metodologia}
+  \input{section/metholodogy}
+  
+\section{Protocolos de comunicación}
+Los protocolos de comunicación permiten el intercambio de datos entre dispositivos dentro de un sistema embebido. Estos pueden ser de tipo serial o inalámbrico, dependiendo del medio de transmisión.
+
+\subsection{Comunicación Serial}
+
+La comunicación serial se basa en la transmisión secuencial de datos bit a bit a través de un canal, lo que permite reducir el cableado y mejorar la eficiencia del hardware.
+
+\begin{itemize}
+    \item Transmisión secuencial de información
+    \item Reducción del cableado
+    \item Mayor eficiencia en el diseño
+    \item Conexión entre microcontroladores y periféricos
+\end{itemize}
+
+Dentro de la comunicación serial se destacan los siguientes protocolos:
+
+\subsubsection{UART (Universal Asynchronous Receiver-Transmitter)}
+
+Es un protocolo de comunicación asíncrono que no utiliza señal de reloj compartida.
+
+\begin{itemize}
+    \item Comunicación punto a punto
+    \item Uso de tramas de datos
+    \item Configuración mediante baudios, bits de datos, paridad y bits de parada
+    \item Solo requiere dos líneas: TX y RX (más GND)
+\end{itemize}
+
+\textbf{Ventajas:}
+\begin{itemize}
+    \item Simplicidad
+    \item Bajo costo
+    \item Comunicación full-duplex
+    \item Mayor alcance comparado con otros protocolos seriales
+\end{itemize}
+
+\subsubsection{I2C (Inter-Integrated Circuit)}
+
+Es un protocolo síncrono que permite la conexión de múltiples dispositivos utilizando solo dos líneas.
+
+\begin{itemize}
+    \item Líneas: SDA (datos) y SCL (reloj)
+    \item Permite múltiples dispositivos en el mismo bus
+    \item Maneja direccionamiento (7 y 10 bits)
+    \item Requiere resistencias pull-up
+\end{itemize}
+
+\textbf{Ventajas:}
+\begin{itemize}
+    \item Reduce el número de conexiones
+    \item Facilita la interconexión de varios periféricos
+\end{itemize}
+
+\subsubsection{SPI (Serial Peripheral Interface)}
+
+Es un protocolo síncrono de alta velocidad basado en una arquitectura maestro-esclavo.
+
+\begin{itemize}
+    \item Líneas: MOSI, MISO, SCK y SS/CS
+    \item Comunicación full-duplex
+    \item Alta velocidad de transmisión
+    \item Sincronización mediante señal de reloj
+\end{itemize}
+
+\textbf{Ventajas:}
+\begin{itemize}
+    \item Alta velocidad
+    \item Precisión en la transmisión de datos
+\end{itemize}
+
+\subsubsection{Comparación de Protocolos}
+
+\begin{center}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Característica} & \textbf{UART} & \textbf{I2C} & \textbf{SPI} \\
+\hline
+Tipo & Asíncrono & Síncrono & Síncrono \\
+\hline
+Líneas & TX, RX & SDA, SCL & MOSI, MISO, SCK, SS \\
+\hline
+Reloj & No & Sí & Sí \\
+\hline
+Dispositivos & 2 & Múltiples & Maestro-esclavos \\
+\hline
+Velocidad & Media & Media & Alta \\
+\hline
+Complejidad & Baja & Media & Media \\
+\hline
+\end{tabular}
+}
+\end{center}  
+
+\subsubsection{Criterios de Selección}
+
+\begin{itemize}
+    \item Para alta velocidad: SPI
+    \item Para múltiples dispositivos con pocas líneas: I2C
+    \item Para comunicación simple punto a punto: UART
+\end{itemize}
+
+\subsection{Comunicación Inalámbrica}
+
+Los protocolos inalámbricos son fundamentales en aplicaciones IoT y permiten la comunicación sin necesidad de conexiones físicas.
+
+\begin{itemize}
+    \item Bluetooth Low Energy (BLE): bajo consumo y corto alcance
+    \item Wi-Fi: alta tasa de datos e integración a internet
+    \item Zigbee: redes malladas de bajo consumo
+    \item Thread: comunicación en malla basada en IPv6
+    \item LoRaWAN: largo alcance y bajo consumo
+    \item NB-IoT: comunicación celular para IoT
+\end{itemize}
+
+\subsubsection{Principales protocolos inalámbricos}
+
+\paragraph{\textbf{WI-Fi}}
+
+Protocolo diseñado inicialmente para redes de computadoras y acceso a internet. Actualmente es ampliamente utilizado en dispositivos IoT con suficiente disponibilidad energética.
+
+\begin{itemize}
+    \item Alcance: $\sim$100 m
+    \item Velocidad: Alta (hasta Gbps)
+    \item Uso: Cámaras, ESP32, interfaces HMI
+\end{itemize}
+
+\paragraph{\textbf{Bluetooth y Bluetooth Low Energy (BLE)}}
+
+Bluetooth es un estándar de corto alcance, mientras que BLE está optimizado para bajo consumo energético, ideal para dispositivos alimentados por batería.
+
+\begin{itemize}
+    \item Alcance: 10–100 m
+    \item Velocidad: Media (1–3 Mbps)
+    \item Uso: Wearables, sensores cercanos
+\end{itemize}
+
+\paragraph{\textbf{ZigBee}}
+
+Protocolo orientado a redes de sensores distribuidos con bajo consumo energético, utilizando topologías malladas.
+
+\begin{itemize}
+    \item Alcance: $\sim$100 m
+    \item Velocidad: Baja (250 kbps)
+    \item Uso: Domótica, automatización industrial
+\end{itemize}
+
+\paragraph{\textbf{Thread}}
+
+Protocolo de red mallada basado en IPv6, diseñado para IoT, con capacidad de auto-reparación y bajo consumo energético.
+
+\begin{itemize}
+    \item Red mallada segura
+    \item Optimizado para dispositivos de baja potencia
+    \item Uso: Hogares inteligentes y edificios
+\end{itemize}
+
+\paragraph{\textbf{LoRaWAN}}
+
+Protocolo de largo alcance y bajo consumo, ideal para aplicaciones donde los dispositivos están muy alejados entre sí.
+
+\begin{itemize}
+    \item Alcance: 2–15 km
+    \item Velocidad: Muy baja
+    \item Uso: Agricultura, monitoreo ambiental, ciudades inteligentes
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+Tecnología & Alcance & Velocidad & Aplicación \\
+\hline
+Wi-Fi & $\sim$100 m & Alta & Internet, video, IoT con energía \\
+\hline
+Bluetooth/BLE & 10–100 m & Media & Sensores, wearables \\
+\hline
+ZigBee & $\sim$100 m & Baja & Domótica \\
+\hline
+LoRaWAN & 2–15 km & Muy baja & Monitoreo remoto \\
+\hline
+\end{tabular}
+\caption{Comparación de protocolos inalámbricos}
+\end{table}
+
+\subsubsection{Criterios de selección}
+
+La elección del protocolo inalámbrico debe considerar:
+
+\begin{itemize}
+    \item \textbf{Alcance:} Distancia entre dispositivos
+    \item \textbf{Consumo energético:} Especialmente en dispositivos con batería
+    \item \textbf{Velocidad de transmisión:} Cantidad de datos a enviar
+    \item \textbf{Aplicación:} Tipo de sistema (industrial, doméstico, urbano)
+\end{itemize}
+
+En general:
+\begin{itemize}
+    \item Wi-Fi: cuando se requiere alta velocidad
+    \item BLE: cuando se necesita bajo consumo
+    \item ZigBee/Thread: redes de múltiples dispositivos
+    \item LoRaWAN: comunicación a larga distancia
+\end{itemize}
+
+\subsubsection{Importancia en IoT}
+
+Los protocolos inalámbricos son la base del IoT, ya que permiten conectar sensores, dispositivos y sistemas a internet sin infraestructura cableada. Su correcta selección impacta directamente en el rendimiento, eficiencia y escalabilidad del sistema.
+
+\section{Internet traditional versus IoT}
+El internet tradicional se centra principalmente en la interacción entre usuarios y servicios digitales, donde el flujo de información incluye datos como texto, imágenes, audio y video. En este contexto, el usuario es el actor principal y el objetivo es el intercambio de información mediante plataformas web.
+
+En contraste, el Internet de las Cosas (IoT) amplía este paradigma al integrar objetos físicos capaces de captar variables del entorno, procesarlas y comunicarlas a través de la red. El cambio fundamental radica en que el entorno físico se convierte en una fuente constante de datos útiles para monitoreo, control y toma de decisiones.
+
+Por su parte, el Internet Industrial de las Cosas (IIoT) lleva este concepto al ámbito productivo, donde los datos se utilizan para optimizar procesos, mejorar la eficiencia, garantizar la seguridad y permitir la automatización avanzada en sistemas industriales.
+
+\subsection{Comparación conceptual}
+
+\begin{center}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Aspecto} & \textbf{Internet Tradicional} & \textbf{IoT} & \textbf{IIoT} \\
+\hline
+Actor principal & Usuarios y servicios web & Objetos + usuarios & Máquinas y procesos \\
+\hline
+Tipo de datos & Multimedia & Variables físicas & Datos de proceso \\
+\hline
+Objetivo & Intercambio de información & Monitoreo y control & Optimización y eficiencia \\
+\hline
+Ejemplo & Redes sociales & Casa inteligente & Industria conectada \\
+\hline
+\end{tabular}
+}
+\end{center}
+
+\subsection{IoT desde sistemas embebidos}
+
+Desde la perspectiva de sistemas embebidos, IoT se basa en la integración de cinco funciones:
+
+\begin{itemize}
+    \item Sensar: capturar variables físicas (temperatura, presión, humedad, etc.)
+    \item Procesar: filtrar y organizar los datos en el microcontrolador
+    \item Comunicar: enviar información mediante protocolos y redes
+    \item Visualizar: mostrar o almacenar los datos
+    \item Actuar: ejecutar acciones sobre el sistema
+\end{itemize}
+
+Un sistema embebido deja de ser un dispositivo aislado y pasa a ser un nodo dentro de una arquitectura conectada.
+
+\subsection{Arquitectura básica IoT}
+
+Una solución IoT se estructura en capas:
+
+\begin{itemize}
+    \item \textbf{Capa física:} sensores, actuadores y microcontroladores
+    \item \textbf{Capa de comunicación:} redes y tecnologías de transmisión
+    \item \textbf{Capa de servicio:} almacenamiento, procesamiento y gestión de datos
+    \item \textbf{Capa de aplicación:} interacción con el usuario y toma de decisiones
+\end{itemize}
+
+El valor del sistema no está únicamente en el nodo embebido, sino en la capacidad de transformar datos en información útil.
+
+\subsection{Comunicación en IoT}
+
+Una solución IoT integra múltiples niveles de comunicación:
+
+\subsubsection{Dentro del nodo}
+\begin{itemize}
+    \item GPIO, ADC y PWM
+    \item Protocolos como I2C, SPI y UART
+\end{itemize}
+
+\subsubsection{Hacia la red}
+\begin{itemize}
+    \item Wi-Fi: alta tasa de datos
+    \item BLE: bajo consumo
+    \item LoRa: largo alcance
+    \item Redes móviles: amplia cobertura
+\end{itemize}
+
+\subsubsection{Protocolos de aplicación}
+\begin{itemize}
+    \item HTTP: simple pero menos eficiente
+    \item MQTT: ligero y eficiente para IoT
+    \item WebSocket: comunicación en tiempo real
+\end{itemize}
+
+\subsection{Lógica de implementación}
+
+El diseño de una solución IoT sigue una secuencia:
+
+\begin{enumerate}
+    \item Definir la variable a medir
+    \item Seleccionar el sensor adecuado
+    \item Procesar los datos localmente
+    \item Transmitir la información
+    \item Almacenar o visualizar los datos
+    \item Generar una acción o decisión
+\end{enumerate}
+
+\subsection{De IoT a IIoT}
+
+El IIoT aplica estos principios en entornos industriales, permitiendo:
+
+\begin{itemize}
+    \item Mantenimiento predictivo
+    \item Monitoreo de procesos
+    \item Optimización energética
+    \item Trazabilidad y control de calidad
+\end{itemize}
+
+En este contexto, los datos se convierten en un recurso clave para la toma de decisiones en tiempo real.
+
+\subsection{Consideraciones de diseño}
+
+\begin{itemize}
+    \item Seguridad de la información
+    \item Consumo energético
+    \item Robustez del sistema
+    \item Escalabilidad
+    \item Mantenibilidad
+\end{itemize}
+
+\section{Proyecto Final de Sistemas Embebidos}
+% Contenido para pegar justo debajo de \section{Proyecto Final de Sistemas Embebidos}
+
+% Frases extraídas del enunciado del proyecto:
+% "El proyecto consiste en el diseño e implementación de un sistema embebido IoT para el monitoreo y control de variables ambientales y de sustrato en un cultivo experimental de hortalizas."
+% "La solución debe integrar sensores, actuadores, firmware estructurado, comunicación remota y una plataforma de visualización basada en Firebase, MQTT o una solución IoT equivalente." 
+
+\subsection{Descripción del problema}
+En pequeños cultivos de hortalizas el riego y el control de condiciones ambientales suelen realizarse de forma manual, lo que provoca uso ineficiente del agua, variaciones en la humedad del sustrato, estrés hídrico en las plantas y baja trazabilidad del proceso. Se propone un sistema embebido IoT que automatice el riego por goteo y la regulación térmica, registre telemetría y permita visualización remota para mejorar eficiencia y reproducibilidad experimental.
+
+\subsection{Objetivo general y objetivos específicos}
+\subsubsection*{Objetivo general}
+Diseñar e implementar un sistema embebido IoT para el monitoreo remoto y control automático de variables asociadas al crecimiento de la hortaliza asignada por la profesora, integrando sensores, actuadores, comunicación inalámbrica y plataforma de visualización.
+
+\subsubsection*{Objetivos específicos}
+\begin{enumerate}
+  \item Definir requisitos funcionales y no funcionales del sistema considerando la hortaliza asignada.
+  \item Seleccionar y justificar la tarjeta de desarrollo, sensores y actuadores adecuados.
+  \item Diseñar la arquitectura hardware/software y la partición de responsabilidades.
+  \item Implementar firmware modular con control de riego y control térmico con histéresis.
+  \item Integrar comunicación IoT (Firebase o MQTT) para publicación y control remoto.
+  \item Validar el prototipo mediante pruebas experimentales y documentar resultados en GitHub y bitácora.
+\end{enumerate}
+
+\subsection{Requisitos funcionales}
+\begin{enumerate}
+  \item Medir al menos tres variables: \textbf{temperatura ambiente}, \textbf{humedad relativa del aire} y \textbf{humedad del sustrato}.
+  \item Controlar al menos dos actuadores: \textbf{bomba de riego} y \textbf{actuador térmico} (ventilador o calefactor).
+  \item Implementar control automático de riego basado en umbral de humedad del sustrato con histéresis.
+  \item Implementar control térmico basado en umbral de temperatura con histéresis.
+  \item Publicar telemetría periódica y estados de actuadores en una plataforma IoT (Firebase o broker MQTT).
+  \item Permitir recepción de comandos remotos (p. ej. forzar riego) mediante tópicos MQTT o escritura en Firebase.
+  \item Registrar eventos y estados en memoria no volátil (logs mínimos) y evidenciar commits en GitHub.
+\end{enumerate}
+
+\subsection{Requisitos no funcionales}
+\begin{itemize}
+  \item \textbf{Desarrollo:} usar Visual Studio Code; no usar Arduino IDE; evitar archivos \texttt{.ino}.
+  \item \textbf{Calidad del firmware:} modularidad, nombres descriptivos, comentarios técnicos, evitar \texttt{delay()} en la lógica principal.
+  \item \textbf{Conectividad:} conexión Wi‑Fi estable para sincronización periódica; tolerancia a desconexiones temporales (buffer local).
+  \item \textbf{Seguridad:} credenciales Wi‑Fi y credenciales IoT almacenadas de forma segura; comunicación MQTT con autenticación si es posible.
+  \item \textbf{Energía:} consumo razonable; diseño que permita alimentación por fuente DC estable.
+  \item \textbf{Escalabilidad:} arquitectura que permita añadir sensores/actuadores sin reescritura masiva.
+  \item \textbf{Documentación:} README claro, diagrama de conexiones, bitácora con evidencias y commits frecuentes.
+\end{itemize}
+
+\subsection{Diagrama general del sistema}
+% SECCIÓN DE DIAGRAMA DEJADA EN BLANCO A PETICIÓN DEL USUARIO
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{Diagrama_General.png}
+    \caption{Diagrama general del sistema}
+    \label{fig:diagrama_general}
+\end{figure}
+
+
+
+
+
+
+\subsection{Selección justificada de la tarjeta}
+\textbf{Tarjeta recomendada: ESP32 (familia ESP32‑WROOM / ESP32‑S2).}
+
+\textbf{Justificación técnica:}
+\begin{itemize}
+  \item \textbf{Conectividad integrada:} Wi‑Fi (y Bluetooth) incorporado, facilita comunicación con Firebase o broker MQTT sin módulos adicionales.
+  \item \textbf{Entradas analógicas:} múltiples ADCs suficientes para sensores de humedad de sustrato y otros sensores analógicos.
+  \item \textbf{Capacidad de procesamiento:} MCU dual‑core con frecuencia suficiente para tareas de adquisición, control y comunicación simultánea.
+  \item \textbf{Ecosistema y librerías:} amplia disponibilidad de librerías (MQTT, Firebase, sensores) y soporte en PlatformIO/VSCode.
+  \item \textbf{GPIO y periféricos:} suficientes pines digitales para relés, drivers y sensores digitales.
+  \item \textbf{Consumo y coste:} balance adecuado entre consumo, coste y facilidad de uso para proyectos académicos.
+\end{itemize}
+
+\subsection{Listado de sensores y actuadores (propuesta)}
+\subsubsection*{Sensores}
+\begin{itemize}
+  \item \textbf{Sensor de temperatura ambiente:} SHT31 (recomendado por precisión).
+  \item \textbf{Sensor de humedad relativa del aire:} integrado en SHT31 o DHT22.
+  \item \textbf{Sensor de humedad del sustrato:} sensor capacitivo de humedad de suelo (salida analógica).
+  \item \textbf{Sensor de luminosidad (opcional):} BH1750 o LDR con divisor.
+  \item \textbf{Sensor de nivel de agua (opcional):} flotador o sensor ultrasónico para tanque.
+\end{itemize}
+
+\subsubsection*{Actuadores}
+\begin{itemize}
+  \item \textbf{Bomba de riego} controlada por relé o driver MOSFET.
+  \item \textbf{Válvula solenoide} para riego por zonas (opcional).
+  \item \textbf{Actuador térmico:} ventilador DC o resistencia calefactora con driver.
+  \item \textbf{Motor/servomotor} para techo corredizo (si aplica).
+  \item \textbf{Indicadores locales:} LEDs de estado, buzzer para alarmas.
+\end{itemize}
+
+\subsection{Partición hardware / software}
+\subsubsection*{Funciones en hardware}
+\begin{itemize}
+  \item Lectura física de sensores (ADC, I2C).
+  \item Acondicionamiento de señales (filtros RC, divisores).
+  \item Protección eléctrica y drivers para actuadores (relés, MOSFETs).
+  \item Fuente de alimentación estable y protección (fusibles).
+\end{itemize}
+
+\subsubsection*{Funciones en software (firmware)}
+\begin{itemize}
+  \item Lectura periódica y validación de sensores.
+  \item Filtrado digital básico (media móvil, mediana).
+  \item Lógica de control con histéresis para riego y control térmico.
+  \item Publicación periódica de telemetría en Firebase o tópicos MQTT (JSON).
+  \item Suscripción a comandos remotos y ejecución segura de órdenes.
+  \item Gestión de estados, alarmas y registro de eventos en memoria.
+  \item Mecanismos de reconexión y buffer local en caso de pérdida de conectividad.
+\end{itemize}
+
+\subsection{Diagrama de flujo o máquina de estados}
+% SECCIÓN DE DIAGRAMA / MÁQUINA DE ESTADOS DEJADA EN BLANCO A PETICIÓN DEL USUARIO
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{Diagrama_flujo.png}
+    \caption{Diagrama general de flujo del sistema}
+    \label{fig:diagrama_flujo}
+\end{figure}
+
+
+
+\subsection{Parámetros recomendados iniciales y pruebas}
+\begin{itemize}
+  \item \textbf{Humedad sustrato:} definir \(\texttt{humedad\_min}\) según la hortaliza asignada (ej. 40\% para lechuga en sustrato ligero) y \(\texttt{histeresis}=5\%\).
+  \item \textbf{Temperatura:} \(\texttt{temp\_max}\) según especie (ej. 28--30\,°C); \(\texttt{histeresis\_temp}=2\,°C\).
+  \item \textbf{Frecuencia de muestreo:} lectura cada 10--30 s; publicación IoT cada 30--120 s.
+  \item \textbf{Pruebas:} calibrar sensor de humedad de sustrato con medidas gravimétricas; verificar tiempos de riego y consumo de agua; validar reconexión Wi‑Fi y buffer local.
+\end{itemize}
+
+\subsection{Entregables técnicos asociados a este documento}
+\begin{itemize}
+  \item Documento de requisitos y diseño (este archivo LaTeX).
+  \item Diagrama de conexiones (archivo PNG/SVG en carpeta \texttt{hardware/}) \textit{(a completar)}.
+  \item README con instrucciones de compilación y ejecución (PlatformIO + VSCode).
+  \item Plantilla de configuración IoT (ejemplo de \texttt{firebase\_config\_example.json} o tópicos MQTT).
+\end{itemize}
+
+% Fin del bloque LaTeX para pegar
+
+
+\section{Resultados}\label{sec:resultados}
+  \input{section/results}
+
+\section{Conclusiones}\label{sec:conclusiones}
+  \input{section/conclusions}
+
+% La sección de agradecimientos es opcional y no está numerada.
+\section*{Agradecimientos}\label{sec:agradecimientos}
+  \input{section/acknoledgment}
+
+% ===================================================================
+% BIBLIOGRAFÍA
+% ===================================================================
+% Define el estilo de la bibliografía (IEEEtran es el estándar).
+% Añade tus referencias en el archivo 'reference.bib'.
+\bibliographystyle{IEEEtran}
+
+
+\footnotesize\bibliography{reference.bib}
+\section{Anexos}\label{sec:anexos}
+  \input{section/Appendix}
+\end{document}

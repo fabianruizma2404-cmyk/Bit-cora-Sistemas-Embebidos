@@ -1,0 +1,15 @@
+\begin{table*}[!t]            % Inicia entorno de tabla flotante a doble columna. [!t] sugiere ubicarla arriba (top).
+  \centering                   % Centra la tabla en la página.
+  \caption{Tabla ancha de ejemplo con especificaciones.} \label{tab:ancha} % Título de la tabla y etiqueta para referencias cruzadas.
+  \begin{tabular}{l l l l}     % Define 4 columnas, todas alineadas a la izquierda.
+    \toprule                   % Línea horizontal superior (paquete booktabs).
+    Dispositivo & Modelo & Parámetro & Valor \\ % Encabezados de columna.
+    \midrule                   % Línea horizontal media (paquete booktabs).
+    Bomba & XYZ-100 & Potencia & 2 kW \\
+    Válvula & ABC-20 & Diámetro & 1/2" \\
+    Sensor & PT100 & Rango & 0--100 $^{\circ}$C \\
+    Caudalímetro & F-10 & Precisión & \(\pm\)0.5\% \\
+    \bottomrule                % Línea horizontal inferior (paquete booktabs).
+  \end{tabular}
+\end{table*}
+
