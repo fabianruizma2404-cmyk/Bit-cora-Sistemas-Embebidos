@@ -1,8 +1,8 @@
-
+﻿
 //Microcontrolador: ESP32//
 
 
-//DEFINICIÓN DE PINES -//
+//DEFINICIÃ“N DE PINES -//
 
 const int boton1 = 25;
 const int boton2 = 26;
@@ -14,7 +14,7 @@ const int ledError = 12;
 const int releCerradura = 13;
 
 
-//PARÁMETROS DEL SISTEMA //
+//PARÃMETROS DEL SISTEMA //
 
 const int secuenciaCorrecta[3] = {1,2,3};
 
@@ -39,7 +39,7 @@ unsigned long inicioApertura = 0;
 bool cerraduraAbierta = false;
 
 
-//CONFIGURACIÓN //
+//CONFIGURACIÃ“N //
 
 void setup()
 {
@@ -105,7 +105,7 @@ void registrarEntrada(int valor)
 }
 
 
-// VERIFICAR COMBINACIÓN //
+// VERIFICAR COMBINACIÃ“N //
 
 void verificarSecuencia()
 {
@@ -126,7 +126,7 @@ void verificarSecuencia()
 }
 
 
-// COMPARACIÓN //
+// COMPARACIÃ“N //
 
 bool combinacionCorrecta()
 {

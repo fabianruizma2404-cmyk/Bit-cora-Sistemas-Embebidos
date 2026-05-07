@@ -1,4 +1,4 @@
-
+﻿
 const int sensorPin = 34;
 
 const int ledNormal = 16;
@@ -8,7 +8,7 @@ const int ledCritico = 18;
 const int buzzer = 19;
 
 
-/* Definición de umbrales del sistema */
+/* DefiniciÃ³n de umbrales del sistema */
 
 float V1 = 30;
 float V2 = 40;
@@ -16,7 +16,7 @@ float V2 = 40;
 float H = 2;
 
 
-/* Definición de estados del sistema */
+/* DefiniciÃ³n de estados del sistema */
 
 enum EstadoSistema
 {
@@ -28,7 +28,7 @@ enum EstadoSistema
 EstadoSistema estadoActual = NORMAL;
 
 
-/* Configuración inicial del sistema */
+/* ConfiguraciÃ³n inicial del sistema */
 
 void setup()
 {
@@ -42,7 +42,7 @@ void setup()
 }
 
 
-/* Bucle principal de ejecución */
+/* Bucle principal de ejecuciÃ³n */
 
 void loop()
 {
@@ -54,7 +54,7 @@ void loop()
 }
 
 
-/* Lectura del sensor analógico */
+/* Lectura del sensor analÃ³gico */
 
 float leerSensor()
 {
@@ -66,7 +66,7 @@ float leerSensor()
 }
 
 
-/* Actualización del estado del sistema con histéresis */
+/* ActualizaciÃ³n del estado del sistema con histÃ©resis */
 
 void actualizarEstado(float valor)
 {
