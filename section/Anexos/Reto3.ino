@@ -4,14 +4,14 @@ const int sensorHumedad = 35;
 const int releBomba = 23;
 
 
-/* DefiniciÃ³n de parÃ¡metros de control */
+/* Definici??n de par??metros de control */
 
 int umbralRiego = 40;
 
 int hist = 5;
 
 
-/* ParÃ¡metros de temporizaciÃ³n del riego */
+/* Par??metros de temporizaci??n del riego */
 
 unsigned long tiempoRiego = 8000;
 
@@ -20,7 +20,7 @@ unsigned long inicioRiego = 0;
 bool bombaActiva = false;
 
 
-/* ConfiguraciÃ³n inicial del sistema */
+/* Configuraci??n inicial del sistema */
 
 void setup()
 {
@@ -29,7 +29,7 @@ void setup()
 }
 
 
-/* Bucle principal de ejecuciÃ³n */
+/* Bucle principal de ejecuci??n */
 
 void loop()
 {
@@ -55,7 +55,7 @@ int leerHumedad()
 }
 
 
-/* LÃ³gica de control para iniciar el riego */
+/* L??gica de control para iniciar el riego */
 
 void controlRiego(int humedad)
 {
@@ -75,7 +75,7 @@ void controlRiego(int humedad)
 }
 
 
-/* ActivaciÃ³n del sistema de riego */
+/* Activaci??n del sistema de riego */
 
 void iniciarRiego()
 {
@@ -109,7 +109,7 @@ void controlarTemporizador()
 }
 
 
-/* DesactivaciÃ³n del sistema de riego */
+/* Desactivaci??n del sistema de riego */
 
 void detenerRiego()
 {
@@ -119,3 +119,4 @@ void detenerRiego()
     bombaActiva = false;
 
 }
+
