@@ -40,7 +40,7 @@ body{
 }
 
 .header h1{
-  font-size:42px;
+  font-size:28px;
 }
 
 .header p{
@@ -84,18 +84,18 @@ body{
 .alarm-box{
   background:#0e1722;
   border:1px solid rgba(255,255,255,0.08);
-  border-radius:24px;
-  padding:24px;
+  border-radius:18px;
+  padding:18px;
 }
 
 .sensor-icon{
-  width:70px;
-  height:70px;
-  border-radius:20px;
+  width:52px;
+  height:52px;
+  border-radius:52px;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:38px;
+  font-size:26px;
   margin-bottom:20px;
 }
 
@@ -116,12 +116,12 @@ body{
 }
 
 .sensor-title{
-  font-size:28px;
+  font-size:18px;
   margin-bottom:10px;
 }
 
 .sensor-value{
-  font-size:60px;
+  font-size:38px;
   font-weight:bold;
 }
 
@@ -132,7 +132,7 @@ body{
 
 .sensor-status{
   margin-top:16px;
-  font-size:22px;
+  font-size:14px;
 }
 
 .ok{
@@ -166,7 +166,7 @@ body{
 }
 
 .actuator-icon{
-  font-size:50px;
+  font-size:34px;
   margin-bottom:20px;
 }
 
@@ -183,7 +183,7 @@ body{
 }
 
 .actuator-title{
-  font-size:34px;
+  font-size:22px;
   margin-bottom:24px;
 }
 
@@ -192,7 +192,7 @@ body{
   align-items:center;
   gap:16px;
   margin-bottom:24px;
-  font-size:22px;
+  font-size:15px;
 }
 
 .switch{
@@ -241,12 +241,12 @@ body{
 
 .btn-row button{
   flex:1;
-  padding:14px;
+  padding:10px;
   background:transparent;
   border:1px solid rgba(255,255,255,0.2);
   color:white;
   border-radius:16px;
-  font-size:22px;
+  font-size:15px;
   cursor:pointer;
   transition:0.2s;
 }
