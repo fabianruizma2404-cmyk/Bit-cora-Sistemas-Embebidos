@@ -1,18 +1,67 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+//Hola
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+// ===============================
+// Pines
+// ===============================
+#define SENSOR_AO 34
+#define RELE 26
+
+// ===============================
+// Variables
+// ===============================
+int valorSensor = 0;
+
+// Ajusta este valor según tus pruebas
+int umbral = 2000;
+
+void setup()
+{
+    // Iniciar monitor serial
+    Serial.begin(115200);
+
+    // Pequeña espera para iniciar serial
+    delay(1000);
+
+    // Configurar relé
+    pinMode(RELE, OUTPUT);
+
+    // Relé apagado inicialmente
+    // (Muchos relés son ACTIVE LOW)
+    digitalWrite(RELE, HIGH);
+
+    Serial.println("=================================");
+    Serial.println("SISTEMA INICIADO");
+    Serial.println("Leyendo sensor...");
+    Serial.println("=================================");
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
+void loop()
+{
+    // Leer sensor
+    valorSensor = analogRead(SENSOR_AO);
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+    // Mostrar valor constantemente
+    Serial.print("Valor del sensor: ");
+    Serial.print(valorSensor);
+
+    // Verificar umbral
+    if (valorSensor > umbral)
+    {
+        Serial.println("  --> BOMBA ENCENDIDA");
+
+        // Activar relé
+        digitalWrite(RELE, LOW);
+    }
+    else
+    {
+        Serial.println("  --> Bomba apagada");
+
+        // Apagar relé
+        digitalWrite(RELE, HIGH);
+    }
+
+    // Espera
+    delay(500);
 }
