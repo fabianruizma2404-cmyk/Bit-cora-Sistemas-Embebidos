@@ -547,6 +547,39 @@ Con estos pasos se garantiza que el entorno de desarrollo esté correctamente in
 permitiendo la compilación y ejecución del sistema de riego automático basado en el sensor HW-080 y el control de relé.
 
 \subsubsection{Instrucciones de ejecución.}
+
+Una vez instalado y configurado el entorno de desarrollo, la ejecución del sistema se realiza siguiendo los pasos descritos a continuación:
+
+\begin{enumerate}
+    \item \textbf{Conexión del hardware}: 
+    Conectar el sensor de humedad HW-080 al pin analógico configurado en el código, 
+    el módulo de relé al pin digital correspondiente y la bomba de agua a la salida del relé. 
+    Verificar que todas las conexiones estén firmes y correctas para evitar fallos eléctricos.
+
+    \item \textbf{Carga del programa en la placa}: 
+    Conectar la placa Arduino al ordenador mediante cable USB. 
+    En PlatformIO seleccionar la opción \texttt{Upload} para compilar y transferir el programa a la placa.
+
+    \item \textbf{Inicialización del sistema}: 
+    Una vez cargado el programa, la placa iniciará en estado seguro con el relé apagado. 
+    El sistema comenzará a leer periódicamente la humedad del suelo a través del sensor HW-080.
+
+    \item \textbf{Monitoreo de valores}: 
+    Abrir el \texttt{Serial Monitor} en PlatformIO con una velocidad de \texttt{9600 baudios}. 
+    Observar las lecturas de humedad impresas en pantalla para verificar el correcto funcionamiento del sensor.
+
+    \item \textbf{Activación automática de la bomba}: 
+    Cuando el valor de humedad sea inferior al umbral definido en el código (\texttt{HUMEDAD\_MIN}), 
+    el sistema activará automáticamente el relé y, por ende, la bomba de agua durante el tiempo establecido 
+    en la constante \texttt{TIEMPO\_RIEGO}.
+
+    \item \textbf{Ciclo de operación}: 
+    Tras finalizar el riego, el sistema apagará la bomba y continuará monitoreando la humedad. 
+    Se respetará el intervalo mínimo entre riegos definido en el código para proteger la bomba y evitar sobreuso.
+\end{enumerate}
+
+Con estos pasos, el sistema de riego automático ejecuta su ciclo de manera autónoma, garantizando que el cultivo de pimentón reciba la cantidad adecuada de agua según las condiciones de humedad del suelo.
+
 \subsubsection{Descripción de librerías utilizadas.}
 En el desarrollo del sistema de riego automático se emplearon las siguientes librerías y módulos del entorno Arduino:
 
@@ -575,8 +608,7 @@ En el desarrollo del sistema de riego automático se emplearon las siguientes li
 Estas librerías forman parte del núcleo estándar de Arduino y no requieren instalación adicional en PlatformIO, 
 siempre que el proyecto esté configurado con \texttt{framework = arduino} en el archivo \texttt{platformio.ini}.
 \subsubsection{Capturas de funcionamiento.}
-\subsubsection{Historial de commits
-}
+\subsubsection{Historial de commits}
 
 % TODO: Completar contenido del Entregable 2.
 % Fin del bloque LaTeX para pegar
