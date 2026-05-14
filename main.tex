@@ -495,6 +495,89 @@ describe el comportamiento del firmware embebido.
 
 
 \subsubsection{Codigo Fuente}
+\subsubsection{Archivo README.md.}
+\subsubsection{Diagrama o imagen del sistema.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\columnwidth]{images/Diagrama_general2.png}
+    \caption{Diagrama general del sistema.}
+    \label{fig:diagrama_general2}
+\end{figure}
+\subsubsection{Instrucciones de instalación.}
+Para la correcta instalación y configuración del entorno de desarrollo se deben seguir los siguientes pasos:
+
+\begin{enumerate}
+    \item \textbf{Instalación de Visual Studio Code}: 
+    Descargar e instalar Visual Studio Code desde la página oficial (\texttt{https://code.visualstudio.com/}).
+
+    \item \textbf{Instalación de la extensión PlatformIO}: 
+    Abrir Visual Studio Code, dirigirse al menú de extensiones y buscar \texttt{PlatformIO IDE}. 
+    Proceder con la instalación de la extensión.
+
+    \item \textbf{Creación de un nuevo proyecto}: 
+    En PlatformIO seleccionar la opción \texttt{New Project}, asignar un nombre al proyecto, 
+    elegir la placa correspondiente (ejemplo: \texttt{Arduino Uno}) y seleccionar el framework \texttt{Arduino}.
+
+    \item \textbf{Configuración del archivo \texttt{platformio.ini}}: 
+    Verificar que el archivo de configuración contenga las siguientes líneas:
+    \begin{verbatim}
+    [env:uno]
+    platform = atmelavr
+    board = uno
+    framework = arduino
+    \end{verbatim}
+
+    \item \textbf{Estructura del proyecto}: 
+    Colocar el código fuente dentro de la carpeta \texttt{src/} en el archivo \texttt{main.cpp}. 
+    Es importante incluir al inicio del archivo la librería principal:
+    \begin{verbatim}
+    #include <Arduino.h>
+    \end{verbatim}
+
+    \item \textbf{Compilación y carga del programa}: 
+    Conectar la placa Arduino al ordenador, seleccionar el puerto correspondiente en PlatformIO 
+    y utilizar las opciones \texttt{Build} para compilar y \texttt{Upload} para cargar el programa en la placa.
+
+    \item \textbf{Monitoreo serial}: 
+    Para observar las lecturas del sensor y mensajes de depuración, abrir el \texttt{Serial Monitor} 
+    desde PlatformIO y configurar la velocidad en \texttt{9600 baudios}.
+\end{enumerate}
+
+Con estos pasos se garantiza que el entorno de desarrollo esté correctamente instalado y configurado, 
+permitiendo la compilación y ejecución del sistema de riego automático basado en el sensor HW-080 y el control de relé.
+
+\subsubsection{Instrucciones de ejecución.}
+\subsubsection{Descripción de librerías utilizadas.}
+En el desarrollo del sistema de riego automático se emplearon las siguientes librerías y módulos del entorno Arduino:
+
+\begin{itemize}
+    \item \textbf{Arduino.h}: Librería principal del framework Arduino. 
+    Proporciona las funciones básicas para la interacción con el hardware, tales como 
+    \texttt{pinMode()}, \texttt{digitalWrite()}, \texttt{analogRead()}, \texttt{delay()} y \texttt{millis()}. 
+    Es indispensable para cualquier proyecto en PlatformIO que utilice el framework Arduino.
+
+    \item \textbf{Serial}: Módulo de comunicación serial incluido en el núcleo de Arduino. 
+    Permite enviar y recibir datos entre la placa y el ordenador, facilitando la depuración y el monitoreo de valores 
+    mediante funciones como \texttt{Serial.begin()}, \texttt{Serial.print()} y \texttt{Serial.println()}.
+
+    \item \textbf{Funciones de tiempo}: Integradas en el núcleo de Arduino, 
+    permiten gestionar retardos y medir intervalos de tiempo. 
+    \texttt{delay()} se utiliza para pausar la ejecución en milisegundos, 
+    mientras que \texttt{millis()} devuelve el tiempo transcurrido desde que la placa fue encendida.
+
+    \item \textbf{Entradas y salidas digitales/analógicas}: 
+    Conjunto de funciones que permiten la interacción directa con los pines de la placa. 
+    \texttt{pinMode()} configura un pin como entrada o salida, 
+    \texttt{digitalWrite()} establece un nivel lógico en un pin digital, 
+    y \texttt{analogRead()} obtiene el valor de un pin analógico, fundamental para leer la señal del sensor HW-080.
+\end{itemize}
+
+Estas librerías forman parte del núcleo estándar de Arduino y no requieren instalación adicional en PlatformIO, 
+siempre que el proyecto esté configurado con \texttt{framework = arduino} en el archivo \texttt{platformio.ini}.
+\subsubsection{Capturas de funcionamiento.}
+\subsubsection{Historial de commits
+}
+
 % TODO: Completar contenido del Entregable 2.
 % Fin del bloque LaTeX para pegar
 
