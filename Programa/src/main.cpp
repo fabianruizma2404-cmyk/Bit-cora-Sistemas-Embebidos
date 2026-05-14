@@ -5,9 +5,9 @@
 // ===============================
 // Credenciales (REMPLAZAR DATOS)
 // ===============================
-#define WIFI_SSID "TU_SSID_AQUÍ"
-#define WIFI_PASSWORD "TU_PASSWORD_AQUÍ"
-#define FIREBASE_HOST "https://embebidos-c22c3-default-rtdb.firebaseio.com/" // Sin https://
+#define WIFI_SSID "USTA_Administrativo"
+#define WIFI_PASSWORD "#soytomasino#"
+#define FIREBASE_HOST "https://embebidos-c22c3-default-rtdb.firebaseio.com" // Sin https://
 #define FIREBASE_AUTH "gTiHP7JFvj6GZZ3EJiEIZvwxQslFdmR4tNk9Xive"
 
 // ===============================
