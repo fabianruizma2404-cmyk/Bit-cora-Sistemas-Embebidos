@@ -1,124 +1,131 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard Invernadero IoT</title>
 
-  <link rel="stylesheet" href="styles.css"/>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Invernadero IoT</title>
+
+  <link rel="stylesheet" href="styles.css">
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/1.39.1/iconfont/tabler-icons.min.css"
-  />
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
 </head>
 
 <body>
 
-<div class="dash">
+<div class="dashboard">
 
-  <!-- TOPBAR -->
-  <div class="topbar">
+  <!-- HEADER -->
+  <div class="header">
 
-    <div class="topbar-left">
+    <div class="header-left">
 
       <div class="logo-box">
-        <i class="ti ti-plant"></i>
+        <i class="fa-solid fa-seedling"></i>
       </div>
 
       <div>
-        <div class="title">Invernadero IoT — Pimentón</div>
-        <div class="subtitle">
-          Sistema de monitoreo y control agrícola
-        </div>
+        <h1>Invernadero IoT — Pimentón</h1>
+        <p>Sistema de monitoreo y control agrícola</p>
       </div>
 
     </div>
 
-    <div class="status-badge">
-      <span class="dot-live"></span>
+    <div class="online-box">
+      <span class="live-dot"></span>
       En línea
     </div>
 
   </div>
 
   <!-- SENSORES -->
-  <div class="section-label">
-    Sensores en tiempo real
-  </div>
+  <h2 class="section-title">
+    SENSORES EN TIEMPO REAL
+  </h2>
 
   <div class="cards">
 
     <div class="card">
-      <div class="card-icon amber">
-        <i class="ti ti-temperature"></i>
+
+      <div class="sensor-icon temp">
+        <i class="fa-solid fa-temperature-three-quarters"></i>
       </div>
 
-      <div class="card-label">Temperatura</div>
-
-      <div class="card-value">
-        24<span class="card-unit">°C</span>
+      <div class="sensor-title">
+        Temperatura
       </div>
 
-      <div class="card-trend ok">
-        <i class="ti ti-check"></i>
-        Rango óptimo 20–28°C
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-icon green">
-        <i class="ti ti-droplet"></i>
+      <div class="sensor-value">
+        24<span>°C</span>
       </div>
 
-      <div class="card-label">Humedad ambiental</div>
-
-      <div class="card-value">
-        68<span class="card-unit">%</span>
+      <div class="sensor-status ok">
+        ✓ Rango óptimo 20–28°C
       </div>
 
-      <div class="card-trend ok">
-        <i class="ti ti-check"></i>
-        Rango óptimo 60–75%
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-icon blue">
-        <i class="ti ti-ripple"></i>
-      </div>
-
-      <div class="card-label">Humedad del suelo</div>
-
-      <div class="card-value">
-        41<span class="card-unit">%</span>
-      </div>
-
-      <div class="card-trend warn">
-        <i class="ti ti-alert-triangle"></i>
-        Por debajo de 50%
-      </div>
     </div>
 
     <div class="card">
 
-      <div class="card-icon blue">
-        <i class="ti ti-waves"></i>
+      <div class="sensor-icon hum">
+        <i class="fa-solid fa-droplet"></i>
       </div>
 
-      <div class="card-label">Nivel de agua</div>
-
-      <div style="margin-top:8px">
-        <span class="water-badge ok">
-          <i class="ti ti-check"></i>
-          Sí hay agua
-        </span>
+      <div class="sensor-title">
+        Humedad ambiental
       </div>
 
-      <div class="card-trend neutral">
-        Sensor ultrasónico HC-SR04
+      <div class="sensor-value">
+        68<span>%</span>
+      </div>
+
+      <div class="sensor-status ok">
+        ✓ Rango óptimo 60–75%
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="sensor-icon soil">
+        <i class="fa-solid fa-water"></i>
+      </div>
+
+      <div class="sensor-title">
+        Humedad del suelo
+      </div>
+
+      <div class="sensor-value">
+        41<span>%</span>
+      </div>
+
+      <div class="sensor-status warn">
+        ⚠ Por debajo de 50%
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="sensor-icon water">
+        <i class="fa-solid fa-glass-water"></i>
+      </div>
+
+      <div class="sensor-title">
+        Nivel de agua
+      </div>
+
+      <div class="water-badge">
+        ✓ Nivel suficiente
+      </div>
+
+      <div class="sensor-sub">
+        Sensor HC-SR04
       </div>
 
     </div>
@@ -126,48 +133,48 @@
   </div>
 
   <!-- ACTUADORES -->
-  <div class="section-label">
-    Control manual de actuadores
-  </div>
+  <h2 class="section-title">
+    CONTROL DE ACTUADORES
+  </h2>
 
-  <div class="actuators">
+  <div class="actuator-grid">
 
     <!-- BOMBA -->
     <div class="actuator-card">
 
-      <div class="actuator-header">
-
-        <div class="actuator-name">
-          <i class="ti ti-droplet-half-2"></i>
-          Bomba de agua
-        </div>
-
+      <div class="actuator-icon blue">
+        <i class="fa-solid fa-faucet"></i>
       </div>
 
-      <div class="toggle-wrap">
+      <div class="actuator-title">
+        Bomba de agua
+      </div>
 
-        <label class="toggle">
+      <div class="switch-row">
+
+        <label class="switch">
 
           <input
             type="checkbox"
-            id="toggle-bomba"
-            onchange="updateActuator('bomba')"
-          />
+            id="bomba-switch"
+            disabled
+            onchange="toggleActuator('bomba')"
+          >
 
           <span class="slider"></span>
 
         </label>
 
-        <span class="actuator-status" id="status-bomba">
+        <span id="bomba-status">
           Apagada
         </span>
 
       </div>
 
-      <div class="actuator-mode">
+      <div class="btn-row">
 
         <button
-          class="mode-btn active"
+          class="mode-btn active-btn"
           onclick="setMode('bomba','auto',this)"
         >
           Auto
@@ -187,39 +194,39 @@
     <!-- VENTILADOR -->
     <div class="actuator-card">
 
-      <div class="actuator-header">
-
-        <div class="actuator-name">
-          <i class="ti ti-wind"></i>
-          Ventilador
-        </div>
-
+      <div class="actuator-icon green">
+        <i class="fa-solid fa-fan"></i>
       </div>
 
-      <div class="toggle-wrap">
+      <div class="actuator-title">
+        Ventilador
+      </div>
 
-        <label class="toggle">
+      <div class="switch-row">
+
+        <label class="switch">
 
           <input
             type="checkbox"
-            id="toggle-ventilador"
-            onchange="updateActuator('ventilador')"
-          />
+            id="ventilador-switch"
+            disabled
+            onchange="toggleActuator('ventilador')"
+          >
 
           <span class="slider"></span>
 
         </label>
 
-        <span class="actuator-status" id="status-ventilador">
+        <span id="ventilador-status">
           Apagado
         </span>
 
       </div>
 
-      <div class="actuator-mode">
+      <div class="btn-row">
 
         <button
-          class="mode-btn active"
+          class="mode-btn active-btn"
           onclick="setMode('ventilador','auto',this)"
         >
           Auto
@@ -239,39 +246,39 @@
     <!-- TECHO -->
     <div class="actuator-card">
 
-      <div class="actuator-header">
-
-        <div class="actuator-name">
-          <i class="ti ti-building-pavilion"></i>
-          Techo móvil
-        </div>
-
+      <div class="actuator-icon purple">
+        <i class="fa-solid fa-warehouse"></i>
       </div>
 
-      <div class="toggle-wrap">
+      <div class="actuator-title">
+        Techo móvil
+      </div>
 
-        <label class="toggle">
+      <div class="switch-row">
+
+        <label class="switch">
 
           <input
             type="checkbox"
-            id="toggle-techo"
-            onchange="updateActuator('techo')"
-          />
+            id="techo-switch"
+            disabled
+            onchange="toggleActuator('techo')"
+          >
 
           <span class="slider"></span>
 
         </label>
 
-        <span class="actuator-status" id="status-techo">
+        <span id="techo-status">
           Cerrado
         </span>
 
       </div>
 
-      <div class="actuator-mode">
+      <div class="btn-row">
 
         <button
-          class="mode-btn active"
+          class="mode-btn active-btn"
           onclick="setMode('techo','auto',this)"
         >
           Auto
@@ -290,67 +297,89 @@
 
   </div>
 
-  <!-- GRAFICA -->
-  <div class="chart-card">
+  <!-- GRAFICAS -->
+  <div class="charts-section">
 
-    <div class="chart-header">
+    <div class="chart-left">
 
-      <div class="chart-title">
-        Histórico de las últimas 12 horas
-      </div>
+      <div class="chart-header">
 
-    </div>
+        <h2>HISTÓRICO DE VARIABLES</h2>
 
-    <div class="chart-container">
-      <canvas id="histChart"></canvas>
-    </div>
+        <div class="chart-buttons">
 
-  </div>
+          <button
+            onclick="showChart(0)"
+            class="chart-btn active-chart"
+          >
+            Temperatura
+          </button>
 
-  <!-- ALARMAS -->
-  <div class="section-label">
-    Alarmas activas
-  </div>
+          <button
+            onclick="showChart(1)"
+            class="chart-btn"
+          >
+            Humedad Ambiente
+          </button>
 
-  <div class="alarms">
+          <button
+            onclick="showChart(2)"
+            class="chart-btn"
+          >
+            Humedad Suelo
+          </button>
 
-    <div class="alarm-item warn">
-
-      <div class="alarm-icon warn">
-        <i class="ti ti-alert-triangle"></i>
-      </div>
-
-      <div class="alarm-text">
-
-        <div class="alarm-title">
-          Humedad del suelo baja (41%)
-        </div>
-
-        <div class="alarm-time">
-          Hace 8 minutos — umbral mínimo: 50%
         </div>
 
       </div>
 
-      <button class="alarm-ack">
-        Reconocer
-      </button>
+      <div class="chart-box">
+        <canvas id="mainChart"></canvas>
+      </div>
+
+    </div>
+
+    <!-- ALARMAS -->
+    <div class="alarm-box">
+
+      <h2>ALARMAS ACTIVAS</h2>
+
+      <div class="alarm-card">
+
+        <div class="alarm-icon">
+          ⚠
+        </div>
+
+        <div class="alarm-content">
+
+          <h3>Humedad del suelo baja (41%)</h3>
+
+          <p>Hace 8 minutos</p>
+
+          <span>Umbral mínimo: 50%</span>
+
+        </div>
+
+        <button>
+          Reconocer
+        </button>
+
+      </div>
 
     </div>
 
   </div>
 
   <!-- FOOTER -->
-  <div class="footer-row">
+  <div class="footer">
 
-    <span id="updateTime">
-      <i class="ti ti-clock"></i>
-      Última actualización: hace 12 segundos
-    </span>
+    <div>
+      ⏺ Última actualización: hace 12 segundos
+    </div>
 
-    <span>
-      ESP32 · DHT11 · YL-100 · HC-SR04 · Firebase
-    </span>
+    <div>
+      ESP32 • DHT11 • YL-100 • HC-SR04 • Firebase
+    </div>
 
   </div>
 

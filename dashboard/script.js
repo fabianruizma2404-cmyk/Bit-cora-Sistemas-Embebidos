@@ -1,150 +1,187 @@
-const labels = [
-  '08:00',
-  '09:00',
-  '10:00',
-  '11:00',
-  '12:00',
-  '13:00',
-  '14:00',
-  '15:00',
-  '16:00',
-  '17:00',
-  '18:00',
-  '19:00'
+const ctx = document.getElementById('mainChart');
+
+const chartData = [
+
+{
+label:'Temperatura °C',
+color:'#ff9800',
+data:[20,22,25,27,28,29,30,29,27,25,24,23]
+},
+
+{
+label:'Humedad Ambiental %',
+color:'#22c55e',
+data:[75,74,72,70,69,68,67,66,67,68,69,70]
+},
+
+{
+label:'Humedad Suelo %',
+color:'#3b82f6',
+data:[55,54,52,50,49,47,46,45,44,43,42,41]
+}
+
 ];
 
-const tempData = [22,23,23,25,26,27,26,25,24,24,23,24];
+const labels = [
+'08:00',
+'09:00',
+'10:00',
+'11:00',
+'12:00',
+'13:00',
+'14:00',
+'15:00',
+'16:00',
+'17:00',
+'18:00',
+'19:00'
+];
 
-const humAmbData = [72,70,68,65,63,61,63,65,67,68,69,68];
+const chart = new Chart(ctx, {
 
-const humSueloData = [55,54,52,50,48,46,44,43,42,41,41,41];
+type:'line',
 
-new Chart(document.getElementById('histChart'), {
+data:{
+labels:labels,
 
-  type:'line',
+datasets:[{
+label:chartData[0].label,
+data:chartData[0].data,
+borderColor:chartData[0].color,
+backgroundColor:chartData[0].color + '33',
+fill:true,
+tension:0.4,
+pointRadius:5
+}]
+},
 
-  data:{
-    labels,
+options:{
 
-    datasets:[
-      {
-        label:'Temperatura',
-        data:tempData,
-        borderColor:'#EF9F27',
-        backgroundColor:'rgba(239,159,39,0.08)',
-        tension:0.4,
-        fill:true
-      },
+responsive:true,
+maintainAspectRatio:false,
 
-      {
-        label:'Humedad ambiental',
-        data:humAmbData,
-        borderColor:'#1D9E75',
-        backgroundColor:'rgba(29,158,117,0.08)',
-        tension:0.4,
-        fill:true
-      },
+plugins:{
+legend:{
+labels:{
+color:'white'
+}
+}
+},
 
-      {
-        label:'Humedad del suelo',
-        data:humSueloData,
-        borderColor:'#378ADD',
-        backgroundColor:'rgba(55,138,221,0.08)',
-        tension:0.4,
-        fill:true
-      }
-    ]
-  },
+scales:{
 
-  options:{
-    responsive:true,
-    maintainAspectRatio:false,
+x:{
+ticks:{
+color:'#d1d5db'
+},
+grid:{
+color:'rgba(255,255,255,0.08)'
+}
+},
 
-    plugins:{
-      legend:{
-        labels:{
-          color:'#ccc'
-        }
-      }
-    },
+y:{
+ticks:{
+color:'#d1d5db'
+},
+grid:{
+color:'rgba(255,255,255,0.08)'
+}
+}
 
-    scales:{
-      x:{
-        ticks:{
-          color:'#aaa'
-        },
-        grid:{
-          color:'rgba(255,255,255,0.05)'
-        }
-      },
+}
 
-      y:{
-        min:20,
-        max:85,
-
-        ticks:{
-          color:'#aaa'
-        },
-
-        grid:{
-          color:'rgba(255,255,255,0.05)'
-        }
-      }
-    }
-  }
+}
 
 });
 
-const labels_actuator = {
+function showChart(index){
 
-  bomba:['Apagada','Encendida'],
-  ventilador:['Apagado','Encendido'],
-  techo:['Cerrado','Abierto']
+chart.data.datasets[0].label =
+chartData[index].label;
 
-};
+chart.data.datasets[0].data =
+chartData[index].data;
 
-function updateActuator(id){
+chart.data.datasets[0].borderColor =
+chartData[index].color;
 
-  const cb = document.getElementById('toggle-' + id);
+chart.data.datasets[0].backgroundColor =
+chartData[index].color + '33';
 
-  const st = document.getElementById('status-' + id);
+chart.update();
 
-  const on = cb.checked;
+document.querySelectorAll('.chart-btn')
+.forEach(btn => btn.classList.remove('active-chart'));
 
-  st.textContent = labels_actuator[id][on ? 1 : 0];
-
-  st.className = 'actuator-status' + (on ? ' on' : '');
-
-}
-
-function setMode(id, mode, btn){
-
-  const parent = btn.parentElement;
-
-  parent.querySelectorAll('.mode-btn')
-    .forEach(b => b.classList.remove('active'));
-
-  btn.classList.add('active');
-
-  const cb = document.getElementById('toggle-' + id);
-
-  cb.disabled = (mode === 'auto');
-
-  if(mode === 'auto'){
-
-    cb.checked = false;
-
-    updateActuator(id);
-
-  }
+document.querySelectorAll('.chart-btn')[index]
+.classList.add('active-chart');
 
 }
 
-setInterval(() => {
+function setMode(id, mode, button){
 
-  document.getElementById('updateTime').innerHTML =
-    '<i class="ti ti-clock"></i> Última actualización: hace ' +
-    Math.floor(Math.random() * 30 + 5) +
-    ' segundos';
+const card = button.parentElement;
 
-}, 5000);
+card.querySelectorAll('.mode-btn')
+.forEach(btn => btn.classList.remove('active-btn'));
+
+button.classList.add('active-btn');
+
+const sw = document.getElementById(id + '-switch');
+
+const status = document.getElementById(id + '-status');
+
+if(mode === 'manual'){
+
+sw.disabled = false;
+
+}else{
+
+sw.disabled = true;
+
+sw.checked = false;
+
+if(id === 'bomba'){
+status.innerText = 'Apagada';
+}
+
+if(id === 'ventilador'){
+status.innerText = 'Apagado';
+}
+
+if(id === 'techo'){
+status.innerText = 'Cerrado';
+}
+
+}
+
+}
+
+function toggleActuator(id){
+
+const sw = document.getElementById(id + '-switch');
+
+const status = document.getElementById(id + '-status');
+
+if(id === 'bomba'){
+
+status.innerText =
+sw.checked ? 'Encendida' : 'Apagada';
+
+}
+
+if(id === 'ventilador'){
+
+status.innerText =
+sw.checked ? 'Encendido' : 'Apagado';
+
+}
+
+if(id === 'techo'){
+
+status.innerText =
+sw.checked ? 'Abierto' : 'Cerrado';
+
+}
+
+}
