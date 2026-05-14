@@ -398,153 +398,104 @@ En este contexto, los datos se convierten en un recurso clave para la toma de de
     \item Mantenibilidad
 \end{itemize}
 
+% =============================================================
+%  PROYECTO FINAL DE SISTEMAS EMBEBIDOS
+% =============================================================
 \section{Proyecto Final de Sistemas Embebidos}
-% Contenido para pegar justo debajo de \section{Proyecto Final de Sistemas Embebidos}
 
-% Frases extraídas del enunciado del proyecto:
-% "El proyecto consiste en el diseño e implementación de un sistema embebido IoT para el monitoreo y control de variables ambientales y de sustrato en un cultivo experimental de hortalizas."
-% "La solución debe integrar sensores, actuadores, firmware estructurado, comunicación remota y una plataforma de visualización basada en Firebase, MQTT o una solución IoT equivalente." 
+% -------------------------------------------------------------
+\subsection{Entregable 1}
+% -------------------------------------------------------------
 
-\subsection{Descripción del problema}
-En pequeños cultivos de hortalizas el riego y el control de condiciones ambientales suelen realizarse de forma manual, lo que provoca uso ineficiente del agua, variaciones en la humedad del sustrato, estrés hídrico en las plantas y baja trazabilidad del proceso. Se propone un sistema embebido IoT que automatice el riego por goteo y la regulación térmica, registre telemetría y permita visualización remota para mejorar eficiencia y reproducibilidad experimental.
+% --- 1.1  Descripción del problema ----------------------------
+\subsubsection{Descripción del Problema}
 
-\subsection{Objetivo general y objetivos específicos}
-\subsubsection*{Objetivo general}
-Diseñar e implementar un sistema embebido IoT para el monitoreo remoto y control automático de variables asociadas al crecimiento de la hortaliza asignada por la profesora, integrando sensores, actuadores, comunicación inalámbrica y plataforma de visualización.
+\noindent
+En pequeños cultivos de hortalizas el riego y el control de
+condiciones ambientales suelen realizarse de forma manual\ldots
 
-\subsubsection*{Objetivos específicos}
-\begin{enumerate}
-  \item Definir requisitos funcionales y no funcionales del sistema considerando la hortaliza asignada.
-  \item Seleccionar y justificar la tarjeta de desarrollo, sensores y actuadores adecuados.
-  \item Diseñar la arquitectura hardware/software y la partición de responsabilidades.
-  \item Implementar firmware modular con control de riego y control térmico con histéresis.
-  \item Integrar comunicación IoT (Firebase o MQTT) para publicación y control remoto.
-  \item Validar el prototipo mediante pruebas experimentales y documentar resultados en GitHub y bitácora.
-\end{enumerate}
+% --- 1.2  Objetivos -------------------------------------------
+\subsubsection{Objetivos}
 
-\subsection{Requisitos funcionales}
-\begin{enumerate}
-  \item Medir al menos tres variables: \textbf{temperatura ambiente}, \textbf{humedad relativa del aire} y \textbf{humedad del sustrato}.
-  \item Controlar al menos dos actuadores: \textbf{bomba de riego} y \textbf{actuador térmico} (ventilador o calefactor).
-  \item Implementar control automático de riego basado en umbral de humedad del sustrato con histéresis.
-  \item Implementar control térmico basado en umbral de temperatura con histéresis.
-  \item Publicar telemetría periódica y estados de actuadores en una plataforma IoT (Firebase o broker MQTT).
-  \item Permitir recepción de comandos remotos (p. ej. forzar riego) mediante tópicos MQTT o escritura en Firebase.
-  \item Registrar eventos y estados en memoria no volátil (logs mínimos) y evidenciar commits en GitHub.
-\end{enumerate}
+\paragraph{Objetivo General}
+Diseñar e implementar un sistema embebido IoT para el monitoreo
+remoto y control automático\ldots
 
-\subsection{Requisitos no funcionales}
+\paragraph{Objetivos Específicos}
 \begin{itemize}
-  \item \textbf{Desarrollo:} usar Visual Studio Code; no usar Arduino IDE; evitar archivos \texttt{.ino}.
-  \item \textbf{Calidad del firmware:} modularidad, nombres descriptivos, comentarios técnicos, evitar \texttt{delay()} en la lógica principal.
-  \item \textbf{Conectividad:} conexión Wi‑Fi estable para sincronización periódica; tolerancia a desconexiones temporales (buffer local).
-  \item \textbf{Seguridad:} credenciales Wi‑Fi y credenciales IoT almacenadas de forma segura; comunicación MQTT con autenticación si es posible.
-  \item \textbf{Energía:} consumo razonable; diseño que permita alimentación por fuente DC estable.
-  \item \textbf{Escalabilidad:} arquitectura que permita añadir sensores/actuadores sin reescritura masiva.
-  \item \textbf{Documentación:} README claro, diagrama de conexiones, bitácora con evidencias y commits frecuentes.
+    \item Definir requisitos funcionales y no funcionales.
+    \item Seleccionar tarjeta de desarrollo, sensores y actuadores.
+    \item Implementar firmware modular e integrar comunicación IoT.
 \end{itemize}
 
-\subsection{Diagrama general del sistema}
-% SECCIÓN DE DIAGRAMA DEJADA EN BLANCO A PETICIÓN DEL USUARIO
+% --- 1.3  Requisitos del Sistema ------------------------------
+\subsubsection{Requisitos del Sistema}
+
+\paragraph{Funcionales}
+\begin{itemize}
+    \item Medición de temperatura, humedad de aire y sustrato.
+    \item Control automático de bomba y actuador térmico con histéresis.
+    \item Publicación de telemetría y recepción de comandos remotos.
+\end{itemize}
+
+\paragraph{No Funcionales}
+\begin{itemize}
+    \item Uso de VS\,Code y PlatformIO (evitar \texttt{.ino}).
+    \item Conectividad Wi-Fi con buffer local para desconexiones.
+    \item Documentación técnica y commits frecuentes en GitHub.
+\end{itemize}
+
+% --- 1.4  Diagrama General del Sistema ------------------------
+\subsubsection{Diagrama General del Sistema}
+
+\noindent
+La figura~\ref{fig:diagrama_general} muestra la arquitectura
+de alto nivel del sistema propuesto.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\columnwidth]{Diagrama_General.png}
-    \caption{Diagrama general del sistema}
+    \includegraphics[width=0.85\columnwidth]{Diagrama_General.png}
+    \caption{Diagrama general del sistema.}
     \label{fig:diagrama_general}
 \end{figure}
 
+% --- 1.5  Selección de Hardware y CAD -------------------------
+\subsubsection{Selección de Hardware y Diseño CAD}
 
+\noindent
+\textbf{Tarjeta: ESP32.} Elegida por su conectividad Wi-Fi
+integrada y sus múltiples canales ADC. La
+figura~\ref{fig:IMAGEN_CAD} muestra el diseño CAD del sistema
+estructural básico.
 
-
-
-
-\subsection{Selección justificada de la tarjeta}
-\textbf{Tarjeta recomendada: ESP32 (familia ESP32‑WROOM / ESP32‑S2).}
-
-\textbf{Justificación técnica:}
-\begin{itemize}
-  \item \textbf{Conectividad integrada:} Wi‑Fi (y Bluetooth) incorporado, facilita comunicación con Firebase o broker MQTT sin módulos adicionales.
-  \item \textbf{Entradas analógicas:} múltiples ADCs suficientes para sensores de humedad de sustrato y otros sensores analógicos.
-  \item \textbf{Capacidad de procesamiento:} MCU dual‑core con frecuencia suficiente para tareas de adquisición, control y comunicación simultánea.
-  \item \textbf{Ecosistema y librerías:} amplia disponibilidad de librerías (MQTT, Firebase, sensores) y soporte en PlatformIO/VSCode.
-  \item \textbf{GPIO y periféricos:} suficientes pines digitales para relés, drivers y sensores digitales.
-  \item \textbf{Consumo y coste:} balance adecuado entre consumo, coste y facilidad de uso para proyectos académicos.
-\end{itemize}
-
-\subsection{Listado de sensores y actuadores (propuesta)}
-\subsubsection*{Sensores}
-\begin{itemize}
-  \item \textbf{Sensor de temperatura ambiente:} SHT31 (recomendado por precisión).
-  \item \textbf{Sensor de humedad relativa del aire:} integrado en SHT31 o DHT22.
-  \item \textbf{Sensor de humedad del sustrato:} sensor capacitivo de humedad de suelo (salida analógica).
-  \item \textbf{Sensor de luminosidad (opcional):} BH1750 o LDR con divisor.
-  \item \textbf{Sensor de nivel de agua (opcional):} flotador o sensor ultrasónico para tanque.
-\end{itemize}
-
-\subsubsection*{Actuadores}
-\begin{itemize}
-  \item \textbf{Bomba de riego} controlada por relé o driver MOSFET.
-  \item \textbf{Válvula solenoide} para riego por zonas (opcional).
-  \item \textbf{Actuador térmico:} ventilador DC o resistencia calefactora con driver.
-  \item \textbf{Motor/servomotor} para techo corredizo (si aplica).
-  \item \textbf{Indicadores locales:} LEDs de estado, buzzer para alarmas.
-\end{itemize}
-
-\subsection{Partición hardware / software}
-\subsubsection*{Funciones en hardware}
-\begin{itemize}
-  \item Lectura física de sensores (ADC, I2C).
-  \item Acondicionamiento de señales (filtros RC, divisores).
-  \item Protección eléctrica y drivers para actuadores (relés, MOSFETs).
-  \item Fuente de alimentación estable y protección (fusibles).
-\end{itemize}
-
-\subsubsection*{Funciones en software (firmware)}
-\begin{itemize}
-  \item Lectura periódica y validación de sensores.
-  \item Filtrado digital básico (media móvil, mediana).
-  \item Lógica de control con histéresis para riego y control térmico.
-  \item Publicación periódica de telemetría en Firebase o tópicos MQTT (JSON).
-  \item Suscripción a comandos remotos y ejecución segura de órdenes.
-  \item Gestión de estados, alarmas y registro de eventos en memoria.
-  \item Mecanismos de reconexión y buffer local en caso de pérdida de conectividad.
-\end{itemize}
-
-\subsection{Diagrama de flujo o máquina de estados}
-% SECCIÓN DE DIAGRAMA / MÁQUINA DE ESTADOS DEJADA EN BLANCO A PETICIÓN DEL USUARIO
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\columnwidth]{Diagrama_flujo.png}
-    \caption{Diagrama general de flujo del sistema}
-    \label{fig:diagrama_flujo}
-\end{figure}
-
-
-
-\subsection{Parámetros recomendados iniciales y pruebas}
-\begin{itemize}
-  \item \textbf{Humedad sustrato:} definir \(\texttt{humedad\_min}\) según la hortaliza asignada (ej. 40\% para lechuga en sustrato ligero) y \(\texttt{histeresis}=5\%\).
-  \item \textbf{Temperatura:} \(\texttt{temp\_max}\) según especie (ej. 28--30\,°C); \(\texttt{histeresis\_temp}=2\,°C\).
-  \item \textbf{Frecuencia de muestreo:} lectura cada 10--30 s; publicación IoT cada 30--120 s.
-  \item \textbf{Pruebas:} calibrar sensor de humedad de sustrato con medidas gravimétricas; verificar tiempos de riego y consumo de agua; validar reconexión Wi‑Fi y buffer local.
-\end{itemize}
-
-\subsection{Entregables técnicos asociados a este documento}
-\begin{itemize}
-  \item Documento de requisitos y diseño (este archivo LaTeX).
-  \item Diagrama de conexiones (archivo PNG/SVG en carpeta \texttt{hardware/}) \textit{(a completar)}.
-  \item README con instrucciones de compilación y ejecución (PlatformIO + VSCode).
-  \item Plantilla de configuración IoT (ejemplo de \texttt{firebase\_config\_example.json} o tópicos MQTT).
-\end{itemize}
-
-\subsection{CAD}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{images/IMAGEN_CAD.png}
-    \caption{CAD del sistema basico estrucural}
+    \includegraphics[width=0.85\columnwidth]{images/IMAGEN_CAD.png}
+    \caption{CAD del sistema básico estructural.}
     \label{fig:IMAGEN_CAD}
 \end{figure}
 
+% --- 1.6  Lógica de Control -----------------------------------
+\subsubsection{Lógica de Control}
+
+\noindent
+El diagrama de flujo de la figura~\ref{fig:diagrama_flujo}
+describe el comportamiento del firmware embebido.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\columnwidth]{Diagrama_flujo.png}
+    \caption{Diagrama de flujo del firmware.}
+    \label{fig:diagrama_flujo}
+\end{figure}
+
+% =============================================================
+\subsection{Entregable 2}
+% =============================================================
+
+
+\subsubsection{Codigo Fuente}
+% TODO: Completar contenido del Entregable 2.
 % Fin del bloque LaTeX para pegar
 
 
