@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.13)  14 MAY 2026 09:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.13)  14 MAY 2026 11:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -964,7 +964,7 @@ Package rerunfilecheck Warning: File `main.out' has changed.
 (rerunfilecheck)                or use package `bookmark'.
 
 Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: BE14CFFD59338595026112D21FF00B78;11849
+(rerunfilecheck)             Before: B6BBC2808C078FE5E28B5A149409DEBD;11907
 (rerunfilecheck)             After:  16CC2C6F92EE9159CFAAB4A472818877;11841.
  ) 
 Here is how much of TeX's memory you used:
@@ -986,7 +986,7 @@ type1/urw/times/utmb8a.pfb><C:/Users/Acer/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/urw/times/utmbi8a.pfb><C:/Users/Acer/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/urw/times/utmr8a.pfb><C:/Users/Acer/AppData/Local/Programs/MiKTeX/fonts/ty
 pe1/urw/times/utmri8a.pfb>
-Output written on main.pdf (14 pages, 6315293 bytes).
+Output written on main.pdf (14 pages, 6315285 bytes).
 PDF statistics:
  1247 PDF objects out of 1440 (max. 8388607)
  588 named destinations out of 1000 (max. 500000)
