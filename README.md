@@ -1,6 +1,6 @@
 # Bitácora — Sistemas Embebidos
 
-**Estudiante:** Fabián Julián Ruiz Mazuera  
+**Estudiante:** Fabián Ruiz &b Julian Díaz 
 **Materia:** Sistemas Embebidos  
 **Repositorio:** [github.com/fabianruizma2404-cmyk/Bit-cora-Sistemas-Embebidos](https://github.com/fabianruizma2404-cmyk/Bit-cora-Sistemas-Embebidos)
 
