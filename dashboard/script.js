@@ -1,187 +1,220 @@
-const ctx = document.getElementById('mainChart');
+// FIREBASE CONFIG
+const firebaseConfig = {
 
-const chartData = [
+  apiKey: "temp",
 
-{
-label:'Temperatura °C',
-color:'#ff9800',
-data:[20,22,25,27,28,29,30,29,27,25,24,23]
-},
+  databaseURL:
+  "https://embebidos-c22c3-default-rtdb.firebaseio.com"
 
-{
-label:'Humedad Ambiental %',
-color:'#22c55e',
-data:[75,74,72,70,69,68,67,66,67,68,69,70]
-},
+};
 
-{
-label:'Humedad Suelo %',
-color:'#3b82f6',
-data:[55,54,52,50,49,47,46,45,44,43,42,41]
-}
+// INICIALIZAR
+firebase.initializeApp(firebaseConfig);
 
-];
+const db = firebase.database();
 
-const labels = [
-'08:00',
-'09:00',
-'10:00',
-'11:00',
-'12:00',
-'13:00',
-'14:00',
-'15:00',
-'16:00',
-'17:00',
-'18:00',
-'19:00'
-];
+// REFERENCIA
+const riegoRef = db.ref("sistema_riego");
+
+// HISTORICO
+const soilHistory = [];
+const labels = [];
+
+// GRAFICA
+const ctx =
+document.getElementById("mainChart");
 
 const chart = new Chart(ctx, {
 
-type:'line',
+  type:'line',
 
-data:{
-labels:labels,
+  data:{
 
-datasets:[{
-label:chartData[0].label,
-data:chartData[0].data,
-borderColor:chartData[0].color,
-backgroundColor:chartData[0].color + '33',
-fill:true,
-tension:0.4,
-pointRadius:5
-}]
-},
+    labels:labels,
 
-options:{
+    datasets:[{
 
-responsive:true,
-maintainAspectRatio:false,
+      label:'Humedad del suelo (%)',
 
-plugins:{
-legend:{
-labels:{
-color:'white'
-}
-}
-},
+      data:soilHistory,
 
-scales:{
+      borderColor:'#3b82f6',
 
-x:{
-ticks:{
-color:'#d1d5db'
-},
-grid:{
-color:'rgba(255,255,255,0.08)'
-}
-},
+      backgroundColor:'#3b82f633',
 
-y:{
-ticks:{
-color:'#d1d5db'
-},
-grid:{
-color:'rgba(255,255,255,0.08)'
-}
-}
+      fill:true,
 
-}
+      tension:0.4,
 
-}
+      pointRadius:4
+
+    }]
+
+  },
+
+  options:{
+
+    responsive:true,
+
+    maintainAspectRatio:false,
+
+    plugins:{
+      legend:{
+        labels:{
+          color:'white'
+        }
+      }
+    },
+
+    scales:{
+
+      x:{
+        ticks:{
+          color:'#d1d5db'
+        },
+        grid:{
+          color:'rgba(255,255,255,0.08)'
+        }
+      },
+
+      y:{
+
+        min:0,
+        max:100,
+
+        ticks:{
+          color:'#d1d5db'
+        },
+
+        grid:{
+          color:'rgba(255,255,255,0.08)'
+        }
+
+      }
+
+    }
+
+  }
 
 });
 
-function showChart(index){
 
-chart.data.datasets[0].label =
-chartData[index].label;
+// TIEMPO REAL
+riegoRef.on('value', (snapshot) => {
 
-chart.data.datasets[0].data =
-chartData[index].data;
+  const data = snapshot.val();
 
-chart.data.datasets[0].borderColor =
-chartData[index].color;
+  if(!data) return;
 
-chart.data.datasets[0].backgroundColor =
-chartData[index].color + '33';
+  // DATOS FIREBASE
+  const humedadRaw =
+  data.nivel_humedad;
 
-chart.update();
+  const estadoBomba =
+  data.estado_bomba;
 
-document.querySelectorAll('.chart-btn')
-.forEach(btn => btn.classList.remove('active-chart'));
+  // CONVERSION ADC -> %
+  let humedad = Math.round(
+    100 - ((humedadRaw / 4095) * 100)
+  );
 
-document.querySelectorAll('.chart-btn')[index]
-.classList.add('active-chart');
+  humedad = Math.max(0, humedad);
+  humedad = Math.min(100, humedad);
 
-}
+  // DASHBOARD
+  document.getElementById('soilValue')
+  .innerText = humedad;
 
-function setMode(id, mode, button){
+  // ALERTA
+  const soilStatus =
+  document.getElementById('soilStatus');
 
-const card = button.parentElement;
+  if(humedad < 50){
 
-card.querySelectorAll('.mode-btn')
-.forEach(btn => btn.classList.remove('active-btn'));
+    soilStatus.innerHTML =
+    '⚠ Humedad baja';
 
-button.classList.add('active-btn');
+    soilStatus.className =
+    'sensor-status warn';
 
-const sw = document.getElementById(id + '-switch');
+  }else{
 
-const status = document.getElementById(id + '-status');
+    soilStatus.innerHTML =
+    '✓ Humedad correcta';
 
-if(mode === 'manual'){
+    soilStatus.className =
+    'sensor-status ok';
 
-sw.disabled = false;
+  }
 
-}else{
+  // ESTADO BOMBA
+  const bombaSwitch =
+  document.getElementById('bomba-switch');
 
-sw.disabled = true;
+  const bombaStatus =
+  document.getElementById('bomba-status');
 
-sw.checked = false;
+  const pumpState =
+  document.getElementById('pumpState');
 
-if(id === 'bomba'){
-status.innerText = 'Apagada';
-}
+  const pumpStatus =
+  document.getElementById('pumpStatus');
 
-if(id === 'ventilador'){
-status.innerText = 'Apagado';
-}
+  if(estadoBomba === "Encendida"){
 
-if(id === 'techo'){
-status.innerText = 'Cerrado';
-}
+    bombaSwitch.checked = true;
 
-}
+    bombaStatus.innerText =
+    'Encendida';
 
-}
+    pumpState.innerText =
+    'ON';
 
-function toggleActuator(id){
+    pumpStatus.innerHTML =
+    '✓ Sistema de riego activo';
 
-const sw = document.getElementById(id + '-switch');
+    pumpStatus.className =
+    'sensor-status ok';
 
-const status = document.getElementById(id + '-status');
+  }else{
 
-if(id === 'bomba'){
+    bombaSwitch.checked = false;
 
-status.innerText =
-sw.checked ? 'Encendida' : 'Apagada';
+    bombaStatus.innerText =
+    'Apagada';
 
-}
+    pumpState.innerText =
+    'OFF';
 
-if(id === 'ventilador'){
+    pumpStatus.innerHTML =
+    '⚠ Sistema detenido';
 
-status.innerText =
-sw.checked ? 'Encendido' : 'Apagado';
+    pumpStatus.className =
+    'sensor-status warn';
 
-}
+  }
 
-if(id === 'techo'){
+  // HISTORICO
+  const now =
+  new Date().toLocaleTimeString();
 
-status.innerText =
-sw.checked ? 'Abierto' : 'Cerrado';
+  labels.push(now);
 
-}
+  soilHistory.push(humedad);
 
-}
+  // LIMITAR
+  if(labels.length > 15){
+
+    labels.shift();
+    soilHistory.shift();
+
+  }
+
+  chart.update();
+
+  // FOOTER
+  document.getElementById('lastUpdate')
+  .innerHTML =
+  '⏺ Última actualización: ' + now;
+
+});
