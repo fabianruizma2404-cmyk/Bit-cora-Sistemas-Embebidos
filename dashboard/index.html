@@ -50,6 +50,7 @@
 
   <div class="cards">
 
+    <!-- TEMPERATURA -->
     <div class="card">
 
       <div class="sensor-icon temp">
@@ -60,7 +61,7 @@
         Temperatura
       </div>
 
-      <div class="sensor-value">
+      <div class="sensor-value" id="temperatura">
         24<span>°C</span>
       </div>
 
@@ -70,6 +71,7 @@
 
     </div>
 
+    <!-- HUMEDAD AMBIENTAL -->
     <div class="card">
 
       <div class="sensor-icon hum">
@@ -80,7 +82,7 @@
         Humedad ambiental
       </div>
 
-      <div class="sensor-value">
+      <div class="sensor-value" id="humedad-aire">
         68<span>%</span>
       </div>
 
@@ -90,6 +92,7 @@
 
     </div>
 
+    <!-- HUMEDAD SUELO -->
     <div class="card">
 
       <div class="sensor-icon soil">
@@ -100,7 +103,7 @@
         Humedad del suelo
       </div>
 
-      <div class="sensor-value">
+      <div class="sensor-value" id="humedad-suelo">
         41<span>%</span>
       </div>
 
@@ -110,6 +113,7 @@
 
     </div>
 
+    <!-- NIVEL AGUA -->
     <div class="card">
 
       <div class="sensor-icon water">
@@ -339,7 +343,6 @@
 
     </div>
 
-    <!-- ALARMAS -->
     <div class="alarm-box">
 
       <h2>ALARMAS ACTIVAS</h2>
@@ -385,6 +388,10 @@
 
 </div>
 
+<!-- Firebase -->
+<script type="module" src="firebase.js"></script>
+
+<!-- Script original -->
 <script src="script.js"></script>
 
 </body>
