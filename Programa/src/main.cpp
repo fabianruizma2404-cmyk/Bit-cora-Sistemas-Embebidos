@@ -1,89 +1,306 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include <FirebaseESP32.h>
+#include <Firebase_ESP_Client.h>
+#include <ESP32Servo.h>
+#include <ESP32PWM.h>
+#include <DHT.h>
 
-// ===============================
-// Credenciales (REMPLAZAR DATOS)
-// ===============================
-#define WIFI_SSID "USTA_Administrativo"
+#include "addons/TokenHelper.h"
+#include "addons/RTDBHelper.h"
+
+//======================
+// WIFI
+//======================
+#define WIFI_SSID     "USTA_Administrativo"
 #define WIFI_PASSWORD "#soytomasino#"
-#define FIREBASE_HOST "https://embebidos-c22c3-default-rtdb.firebaseio.com" 
-#define FIREBASE_AUTH "gTiHP7JFvj6GZZ3EJiEIZvwxQslFdmR4tNk9Xive"
 
-// ===============================
-// Pines
-// ===============================
-#define SENSOR_AO 34
-#define RELE 26
+//======================
+// FIREBASE
+//======================
+#define API_KEY      "AIzaSyDu_jPIrBwjU_uqYAeWDyfxS0FTKsPfNqg"
+#define DATABASE_URL "embebidos-c22c3-default-rtdb.firebaseio.com"
 
-// ===============================
-// Variables y Objetos
-// ===============================
-int valorSensor = 0;
-int umbral = 2000;
+//======================
+// PINES
+//======================
+#define DHTPIN         4
+#define DHTTYPE        DHT11
+#define SENSOR_HUMEDAD 34
+#define RELE_BOMBA     27
+#define PIN_SERVO      13
 
-// Objetos de Firebase
-FirebaseData fbdo;
-FirebaseAuth auth;
+//======================
+// OBJETOS
+//======================
+Servo    miServo;
+DHT      dht(DHTPIN, DHTTYPE);
+
+FirebaseData   fbdo;
+FirebaseData   fbdoControl;
+FirebaseData   fbdoAct;
+FirebaseAuth   auth;
 FirebaseConfig config;
 
-void setup() {
-    Serial.begin(115200);
-    delay(1000);
+//======================
+// VARIABLES
+//======================
+bool techoAbierto    = false;
+bool bombaEncendida  = false;
+bool signupOK        = false;
 
-    // Configurar relé
-    pinMode(RELE, OUTPUT);
-    digitalWrite(RELE, HIGH); // Apagado inicialmente (Active Low)
+bool modoManualBomba = false;
+bool modoManualTecho = false;
 
-    // --- CONEXIÓN WIFI ---
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    Serial.print("Conectando a WiFi");
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
+bool estadoManualBomba = false;
+bool estadoManualTecho = false;
+
+unsigned long lastSend = 0;
+
+//======================
+// STREAM /control
+//======================
+void onControlStream(FirebaseStream data)
+{
+    String path = data.dataPath();
+
+    if (path == "/bomba/modo")
+    {
+        modoManualBomba = (data.stringData() == "manual");
+        if (!modoManualBomba) estadoManualBomba = false;
+        Serial.printf("Modo bomba: %s\n", modoManualBomba ? "MANUAL" : "AUTO");
     }
-    Serial.println("\nWiFi Conectado!");
 
-    // --- CONFIGURACIÓN FIREBASE ---
-    config.host = FIREBASE_HOST;
-    config.signer.tokens.legacy_token = FIREBASE_AUTH;
-    
+    if (path == "/techo/modo")
+    {
+        modoManualTecho = (data.stringData() == "manual");
+        if (!modoManualTecho) estadoManualTecho = false;
+        Serial.printf("Modo techo: %s\n", modoManualTecho ? "MANUAL" : "AUTO");
+    }
+}
+
+//======================
+// STREAM /actuadores
+//======================
+void onActuadoresStream(FirebaseStream data)
+{
+    String path = data.dataPath();
+
+    if (path == "/bomba" && modoManualBomba)
+    {
+        estadoManualBomba = (data.stringData() == "Encendida");
+        Serial.printf("[STREAM] Estado manual bomba: %s\n",
+                      estadoManualBomba ? "ON" : "OFF");
+    }
+
+    if (path == "/techo" && modoManualTecho)
+    {
+        estadoManualTecho = (data.stringData() == "Abierto");
+        Serial.printf("[STREAM] Estado manual techo: %s\n",
+                      estadoManualTecho ? "ON" : "OFF");
+    }
+}
+
+void onStreamTimeout(bool timeout)
+{
+    if (timeout) Serial.println("Stream timeout — reconectando...");
+}
+
+//======================
+// SETUP
+//======================
+void setup()
+{
+    Serial.begin(115200);
+
+    dht.begin();
+    delay(2000); // estabilización del DHT11
+
+    pinMode(RELE_BOMBA, OUTPUT);
+    digitalWrite(RELE_BOMBA, HIGH);
+
+    ESP32PWM::allocateTimer(0);
+    miServo.setPeriodHertz(50);
+    miServo.attach(PIN_SERVO, 500, 2400);
+    miServo.write(100);
+
+    // ── WiFi ──────────────────────────────────────────
+    WiFi.setAutoReconnect(true);
+    WiFi.persistent(true);
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+    Serial.print("Conectando WiFi");
+    while (WiFi.status() != WL_CONNECTED)
+    {
+        Serial.print(".");
+        delay(500);
+    }
+    Serial.printf("\nWiFi conectado — IP: %s\n",
+                  WiFi.localIP().toString().c_str());
+
+    // ── Firebase ──────────────────────────────────────
+    config.api_key      = API_KEY;
+    config.database_url = DATABASE_URL;
+    config.token_status_callback = tokenStatusCallback;
+
+    if (Firebase.signUp(&config, &auth, "", ""))
+    {
+        Serial.println("Firebase: signup OK");
+        signupOK = true;
+    }
+    else
+    {
+        Serial.printf("Firebase signup error: %s\n",
+                      config.signer.signupError.message.c_str());
+    }
+
     Firebase.begin(&config, &auth);
     Firebase.reconnectWiFi(true);
 
-    Serial.println("=================================");
-    Serial.println("SISTEMA CONECTADO A FIREBASE");
-    Serial.println("=================================");
+    // ── Stream 1: /control ────────────────────────────
+    if (!Firebase.RTDB.beginStream(&fbdoControl, "/control"))
+        Serial.printf("Error stream /control: %s\n",
+                      fbdoControl.errorReason().c_str());
+
+    Firebase.RTDB.setStreamCallback(
+        &fbdoControl, onControlStream, onStreamTimeout);
+
+    // ── Stream 2: /actuadores ─────────────────────────
+    if (!Firebase.RTDB.beginStream(&fbdoAct, "/actuadores"))
+        Serial.printf("Error stream /actuadores: %s\n",
+                      fbdoAct.errorReason().c_str());
+
+    Firebase.RTDB.setStreamCallback(
+        &fbdoAct, onActuadoresStream, onStreamTimeout);
+
+    Serial.println("Sistema iniciado");
 }
 
-void loop() {
-    // 1. Leer sensor
-    valorSensor = analogRead(SENSOR_AO);
-    String estadoBomba = "";
+//======================
+// LOOP
+//======================
+void loop()
+{
+    // ── Procesar streams ──────────────────────────────
+    if (!Firebase.RTDB.readStream(&fbdoControl) &&
+        fbdoControl.streamTimeout())
+        Serial.println("Stream /control timeout");
 
-    // 2. Lógica de control
-    Serial.print("Valor del sensor: ");
-    Serial.print(valorSensor);
+    if (!Firebase.RTDB.readStream(&fbdoAct) &&
+        fbdoAct.streamTimeout())
+        Serial.println("Stream /actuadores timeout");
 
-    if (valorSensor > umbral) {
-        Serial.println("  --> BOMBA ENCENDIDA");
-        digitalWrite(RELE, LOW);
-        estadoBomba = "Encendida";
-    } else {
-        Serial.println("  --> Bomba apagada");
-        digitalWrite(RELE, HIGH);
-        estadoBomba = "Apagada";
+    // ── DHT11 ─────────────────────────────────────────
+    float temperatura = dht.readTemperature();
+    float humedadAire = dht.readHumidity();
+
+    if (isnan(temperatura) || isnan(humedadAire))
+    {
+        Serial.println("Error DHT11 — reintentando...");
+        delay(1000);
+        return;
     }
 
-    // 3. Enviar a Firebase (Cada ciclo de 1 segundo)
-    // Solo enviamos si el ESP32 está listo para evitar colapsar la conexión
-    if (Firebase.ready()) {
-        // Guardamos el valor analógico
-        Firebase.setInt(fbdo, "/sistema_riego/nivel_humedad", valorSensor);
-        
-        // Guardamos el estado de la bomba como texto
-        Firebase.setString(fbdo, "/sistema_riego/estado_bomba", estadoBomba);
+    // ── Sensor suelo ──────────────────────────────────
+    int lectura      = analogRead(SENSOR_HUMEDAD);
+    int humedadSuelo = constrain(map(lectura, 3000, 1200, 0, 100), 0, 100);
+
+    // ── Serial ────────────────────────────────────────
+    Serial.printf("Temp: %.1f°C  HumAire: %.0f%%  HumSuelo: %d%%  ADC: %d\n",
+                  temperatura, humedadAire, humedadSuelo, lectura);
+
+    // ── Control techo ─────────────────────────────────
+    if (modoManualTecho)
+    {
+        if (estadoManualTecho && !techoAbierto)
+        {
+            Serial.println("[MANUAL] Abriendo techo");
+            for (int pos = 85; pos <= 180; pos++) { miServo.write(pos); delay(20); }
+            techoAbierto = true;
+        }
+        else if (!estadoManualTecho && techoAbierto)
+        {
+            Serial.println("[MANUAL] Cerrando techo");
+            for (int pos = 180; pos >= 85; pos--) { miServo.write(pos); delay(20); }
+            techoAbierto = false;
+        }
+    }
+    else
+    {
+        Serial.printf("[AUTO TECHO] abierto=%d  temp=%.1f  hum=%.0f\n",
+                      techoAbierto, temperatura, humedadAire);
+
+        if (!techoAbierto && (temperatura > 30 || humedadAire > 85))
+        {
+            Serial.println("[AUTO] Abriendo techo");
+            for (int pos = 100; pos <= 180; pos++) { miServo.write(pos); delay(20); }
+            techoAbierto = true;
+        }
+        else if (techoAbierto && temperatura < 28.5 && humedadAire < 80)
+        {
+            Serial.println("[AUTO] Cerrando techo");
+            for (int pos = 180; pos >= 100; pos--) { miServo.write(pos); delay(20); }
+            techoAbierto = false;
+        }
     }
 
-    delay(1000); // Un segundo de espera entre lecturas
+    // ── Control bomba ─────────────────────────────────
+    if (modoManualBomba)
+    {
+        if (estadoManualBomba && !bombaEncendida)
+        {
+            digitalWrite(RELE_BOMBA, LOW);
+            bombaEncendida = true;
+            Serial.println("[MANUAL] BOMBA ENCENDIDA");
+        }
+        else if (!estadoManualBomba && bombaEncendida)
+        {
+            digitalWrite(RELE_BOMBA, HIGH);
+            bombaEncendida = false;
+            Serial.println("[MANUAL] BOMBA APAGADA");
+        }
+    }
+    else
+    {
+        if (!bombaEncendida && humedadSuelo < 60)
+        {
+            digitalWrite(RELE_BOMBA, LOW);
+            bombaEncendida = true;
+            Serial.println("[AUTO] BOMBA ENCENDIDA");
+        }
+        if (bombaEncendida && humedadSuelo > 75)
+        {
+            digitalWrite(RELE_BOMBA, HIGH);
+            bombaEncendida = false;
+            Serial.println("[AUTO] BOMBA APAGADA");
+        }
+    }
+
+    // ── Firebase: enviar sensores cada 3 s ────────────
+    if (Firebase.ready() && signupOK && millis() - lastSend > 3000)
+    {
+        lastSend = millis();
+
+        Firebase.RTDB.setFloat(&fbdo, "/sensores/temperatura",   temperatura);
+        Firebase.RTDB.setFloat(&fbdo, "/sensores/humedad_aire",  humedadAire);
+        Firebase.RTDB.setInt  (&fbdo, "/sensores/humedad_suelo", humedadSuelo);
+        Firebase.RTDB.setInt  (&fbdo, "/sensores/adc",           lectura);
+
+        // Solo actualizar /actuadores/ en modo auto
+        // En modo manual la web es la fuente de verdad
+        if (!modoManualBomba)
+            Firebase.RTDB.setString(&fbdo, "/actuadores/bomba",
+                                    bombaEncendida ? "Encendida" : "Apagada");
+
+        if (!modoManualTecho)
+        {
+            Firebase.RTDB.setString(&fbdo, "/actuadores/techo",
+                                    techoAbierto ? "Abierto" : "Cerrado");
+            Firebase.RTDB.setInt   (&fbdo, "/actuadores/servo_posicion",
+                                    techoAbierto ? 180 : 100);
+        }
+
+        Serial.println("Datos enviados a Firebase");
+    }
+
+    delay(1000); // mínimo necesario para el DHT11
 }

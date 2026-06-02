@@ -1,14 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
 import {
-  getDatabase,
-  ref,
-  onValue,
-  set,
-  push,
-  query,
-  orderByChild,
-  limitToLast
+  getDatabase, ref, onValue, set, push, query, orderByChild, limitToLast
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
@@ -24,129 +16,77 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-// ─────────────────────────────────────────
-// EXPORTAR set y ref para usarlos en script.js
-// ─────────────────────────────────────────
-window._fbSet = set;
-window._fbRef = (path) => ref(db, path);
+window._fbSet = (path, value) => set(ref(db, path), value);
 
-
-// ─────────────────────────────────────────
-// HELPERS: etiqueta de hora y último timestamp
-// ─────────────────────────────────────────
+// ─── Historial ────────────────────────────────────────
 function horaActual() {
   const d = new Date();
   return d.getHours().toString().padStart(2,"0") + ":" +
          d.getMinutes().toString().padStart(2,"0");
 }
 
-let ultimoTimestamp = 0;
+let _t = null, _ha = null, _hs = null, _lastSave = 0;
 
-// ─────────────────────────────────────────
-// GUARDAR HISTORIAL cada vez que llega un
-// dato nuevo del ESP32 (detectado por cambio
-// real de valor + throttle de 60 s)
-// ─────────────────────────────────────────
-function guardarHistorial(temp, humAire, humSuelo) {
-  const ahora = Date.now();
-  if (ahora - ultimoTimestamp < 60_000) return;   // máx 1 punto/min
-  ultimoTimestamp = ahora;
-
-  const entrada = {
-    ts:        ahora,
-    hora:      horaActual(),
-    temp:      temp,
-    humAire:   humAire,
-    humSuelo:  humSuelo
-  };
-  push(ref(db, "historial"), entrada);
-}
-
-// ─────────────────────────────────────────
-// LECTURA SENSORES (tiempo real)
-// ─────────────────────────────────────────
-let _temp = null, _humAire = null, _humSuelo = null;
-
-onValue(ref(db, "sensores/temperatura"), (snap) => {
-  const v = snap.val();
-  if (v === null) return;
-  _temp = v;
-  document.getElementById("temperatura").innerHTML =
-    v.toFixed(1) + "<span>°C</span>";
-  intentarGuardar();
-});
-
-onValue(ref(db, "sensores/humedad_aire"), (snap) => {
-  const v = snap.val();
-  if (v === null) return;
-  _humAire = v;
-  document.getElementById("humedad-aire").innerHTML =
-    v.toFixed(0) + "<span>%</span>";
-  intentarGuardar();
-});
-
-onValue(ref(db, "sensores/humedad_suelo"), (snap) => {
-  const v = snap.val();
-  if (v === null) return;
-  _humSuelo = v;
-  document.getElementById("humedad-suelo").innerHTML =
-    v + "<span>%</span>";
-  intentarGuardar();
-});
-
-// Solo guarda cuando los 3 valores están disponibles
 function intentarGuardar() {
-  if (_temp !== null && _humAire !== null && _humSuelo !== null) {
-    guardarHistorial(_temp, _humAire, _humSuelo);
-  }
+  if (_t === null || _ha === null || _hs === null) return;
+  const ahora = Date.now();
+  if (ahora - _lastSave < 60_000) return;
+  _lastSave = ahora;
+  push(ref(db, "historial"), {
+    ts: ahora, hora: horaActual(),
+    temp: _t, humAire: _ha, humSuelo: _hs
+  });
 }
 
-// ─────────────────────────────────────────
-// ACTUADORES — leer estado y sincronizar UI
-// ─────────────────────────────────────────
-// Reemplazar los dos onValue de bomba y techo por estos:
-
-onValue(ref(db, "actuadores/bomba"), (snap) => {
-  const estado = snap.val();
-  if (!estado) return;
-
-  const statusEl = document.getElementById("bomba-status");
-  const sw       = document.getElementById("bomba-switch");
-
-  statusEl.innerText = estado;
-
-  // Sincronizar el switch SIEMPRE, esté en auto o manual
-  sw.checked = (estado === "Encendida");
+// ─── Sensores ─────────────────────────────────────────
+onValue(ref(db, "sensores/temperatura"), snap => {
+  const v = snap.val(); if (v === null) return;
+  _t = v;
+  document.getElementById("temperatura").innerHTML = v.toFixed(1) + "<span>°C</span>";
+  intentarGuardar();
 });
 
-onValue(ref(db, "actuadores/techo"), (snap) => {
-  const estado = snap.val();
-  if (!estado) return;
-
-  const statusEl = document.getElementById("techo-status");
-  const sw       = document.getElementById("techo-switch");
-
-  statusEl.innerText = estado;
-
-  // Sincronizar el switch SIEMPRE, esté en auto o manual
-  sw.checked = (estado === "Abierto");
+onValue(ref(db, "sensores/humedad_aire"), snap => {
+  const v = snap.val(); if (v === null) return;
+  _ha = v;
+  document.getElementById("humedad-aire").innerHTML = v.toFixed(0) + "<span>%</span>";
+  intentarGuardar();
 });
 
-// ─────────────────────────────────────────
-// HISTORIAL — cargar últimos 20 puntos
-// y exponer función de recarga para script.js
-// ─────────────────────────────────────────
+onValue(ref(db, "sensores/humedad_suelo"), snap => {
+  const v = snap.val(); if (v === null) return;
+  _hs = v;
+  document.getElementById("humedad-suelo").innerHTML = v + "<span>%</span>";
+  intentarGuardar();
+});
+
+// ─── Actuadores ───────────────────────────────────────
+// _ignorarUpdate evita que el onValue revierta el switch
+// justo después de que el usuario lo mueve
+window._ignorarUpdate = { bomba: false, techo: false };
+
+onValue(ref(db, "actuadores/bomba"), snap => {
+  const estado = snap.val(); if (!estado) return;
+  document.getElementById("bomba-status").innerText = estado;
+  if (!window._ignorarUpdate.bomba) {
+    document.getElementById("bomba-switch").checked = (estado === "Encendida");
+  }
+});
+
+onValue(ref(db, "actuadores/techo"), snap => {
+  const estado = snap.val(); if (!estado) return;
+  document.getElementById("techo-status").innerText = estado;
+  if (!window._ignorarUpdate.techo) {
+    document.getElementById("techo-switch").checked = (estado === "Abierto");
+  }
+});
+
+// ─── Historial para gráfica ───────────────────────────
 window.cargarHistorial = function(callback) {
-  const q = query(
-    ref(db, "historial"),
-    orderByChild("ts"),
-    limitToLast(20)
-  );
-
-  onValue(q, (snap) => {
+  const q = query(ref(db, "historial"), orderByChild("ts"), limitToLast(20));
+  onValue(q, snap => {
     const puntos = [];
     snap.forEach(child => puntos.push(child.val()));
-    // quedan ordenados de más antiguo a más reciente
     callback(puntos);
   });
 };

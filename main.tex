@@ -584,30 +584,85 @@ Con estos pasos, el sistema de riego automático ejecuta su ciclo de manera aut�
 En el desarrollo del sistema de riego automático se emplearon las siguientes librerías y módulos del entorno Arduino:
 
 \begin{itemize}
-    \item \textbf{Arduino.h}: Librería principal del framework Arduino. 
-    Proporciona las funciones básicas para la interacción con el hardware, tales como 
-    \texttt{pinMode()}, \texttt{digitalWrite()}, \texttt{analogRead()}, \texttt{delay()} y \texttt{millis()}. 
-    Es indispensable para cualquier proyecto en PlatformIO que utilice el framework Arduino.
 
-    \item \textbf{Serial}: Módulo de comunicación serial incluido en el núcleo de Arduino. 
-    Permite enviar y recibir datos entre la placa y el ordenador, facilitando la depuración y el monitoreo de valores 
-    mediante funciones como \texttt{Serial.begin()}, \texttt{Serial.print()} y \texttt{Serial.println()}.
+\item \textbf{Arduino.h}: Librería principal del entorno Arduino. Proporciona las funciones básicas necesarias para la programación del microcontrolador, como la configuración de pines de entrada y salida, temporizadores, comunicación serial y estructuras fundamentales utilizadas en el desarrollo de aplicaciones embebidas.
 
-    \item \textbf{Funciones de tiempo}: Integradas en el núcleo de Arduino, 
-    permiten gestionar retardos y medir intervalos de tiempo. 
-    \texttt{delay()} se utiliza para pausar la ejecución en milisegundos, 
-    mientras que \texttt{millis()} devuelve el tiempo transcurrido desde que la placa fue encendida.
+\item \textbf{WiFi.h}: Librería encargada de gestionar la conectividad inalámbrica del ESP32. Permite establecer la conexión a redes Wi-Fi, obtener información de la red, administrar direcciones IP y realizar comunicaciones con servidores a través de Internet.
 
-    \item \textbf{Entradas y salidas digitales/analógicas}: 
-    Conjunto de funciones que permiten la interacción directa con los pines de la placa. 
-    \texttt{pinMode()} configura un pin como entrada o salida, 
-    \texttt{digitalWrite()} establece un nivel lógico en un pin digital, 
-    y \texttt{analogRead()} obtiene el valor de un pin analógico, fundamental para leer la señal del sensor HW-080.
+\item \textbf{Firebase\_ESP\_Client.h}: Librería utilizada para la comunicación entre el ESP32 y la plataforma Firebase. Facilita la autenticación del dispositivo, el envío y recepción de datos en tiempo real, así como el acceso a bases de datos y servicios en la nube proporcionados por Firebase.
+
+\item \textbf{ESP32Servo.h}: Librería diseñada para el control de servomotores mediante el ESP32. Permite generar las señales PWM necesarias para posicionar el servo en ángulos específicos, simplificando su integración en aplicaciones de automatización y control.
+
+\item \textbf{ESP32PWM.h}: Librería que administra la generación de señales PWM (Pulse Width Modulation) en el ESP32. Ofrece funciones para configurar frecuencia, resolución y canales PWM, permitiendo controlar dispositivos como motores, LEDs y actuadores electrónicos.
+
+\item \textbf{DHT.h}: Librería utilizada para la adquisición de datos de sensores de temperatura y humedad de la familia DHT, como el DHT11 y DHT22. Proporciona funciones para inicializar el sensor y obtener mediciones de temperatura ambiente y humedad relativa de forma sencilla.
+
 \end{itemize}
 
 Estas librerías forman parte del núcleo estándar de Arduino y no requieren instalación adicional en PlatformIO, 
 siempre que el proyecto esté configurado con \texttt{framework = arduino} en el archivo \texttt{platformio.ini}.
-\subsubsection{Capturas de funcionamiento.}
+\subsubsection{Capturas de funcionamiento}
+El funcionamiento del sistema está demostrado en el video establecido en el siguiente link: XXXXXXXX
+
+\subsubsection{Programación del ESP32}
+La programación del ESP32 se desarrolló utilizando el entorno Arduino IDE, implementando una arquitectura basada en la adquisición de datos, comunicación con la nube y control de actuadores. El microcontrolador funciona como la unidad central del sistema, encargándose de la lectura de sensores, procesamiento de variables ambientales, ejecución de algoritmos de control y sincronización de información con Firebase.
+
+Inicialmente, se incluyeron las librerías necesarias para el funcionamiento del sistema. Las librerías \texttt{WiFi.h} y \texttt{Firebase\_ESP\_Client.h} permiten la conexión a Internet y la comunicación con la base de datos en tiempo real. Por otra parte, \texttt{DHT.h} se utiliza para la lectura del sensor DHT11, mientras que \texttt{ESP32Servo.h} y \texttt{ESP32PWM.h} permiten el control del servomotor encargado de la apertura y cierre del techo automatizado.
+
+Posteriormente, se definieron las credenciales de conexión a la red Wi-Fi y los parámetros de acceso a Firebase, incluyendo la clave de autenticación y la dirección de la base de datos. Asimismo, se establecieron los pines de conexión correspondientes al sensor DHT11, sensor de humedad del suelo, relé de la bomba de agua y servomotor.
+
+Dentro de la función \texttt{setup()}, el sistema realiza la inicialización de todos los periféricos. En esta etapa se configura la comunicación serial para monitoreo y depuración, se inicializa el sensor DHT11, se establece el estado inicial del relé de la bomba y se configura el servomotor mediante señales PWM. Posteriormente, el ESP32 se conecta a la red Wi-Fi y realiza la autenticación con Firebase para habilitar la comunicación con la base de datos.
+
+Una característica importante de la implementación es el uso de \textit{streams} de Firebase. Se configuraron dos canales de escucha permanentes asociados a las rutas \texttt{/control} y \texttt{/actuadores}. Estos canales permiten que cualquier cambio realizado desde la interfaz web sea recibido instantáneamente por el ESP32, posibilitando la operación remota del sistema sin necesidad de realizar consultas continuas a la base de datos.
+
+Durante la ejecución continua del programa, implementada en la función \texttt{loop()}, se realiza la lectura de las variables ambientales. El sensor DHT11 proporciona los valores de temperatura y humedad relativa del aire, mientras que el sensor de humedad del suelo entrega una señal analógica que posteriormente es convertida a un porcentaje mediante una función de escalamiento.
+
+Con las variables adquiridas se ejecuta la lógica de control automático del sistema. Para el techo automatizado se establecieron condiciones de apertura cuando la temperatura supera los 30\,\textdegree C o la humedad relativa excede el 85\%. De manera contraria, el techo se cierra cuando la temperatura desciende por debajo de 28.5\,\textdegree C y la humedad relativa es inferior al 80\%. Esta diferencia entre los umbrales de apertura y cierre implementa una banda de histéresis que evita conmutaciones repetitivas del actuador.
+
+Para el sistema de riego, la bomba de agua es controlada mediante un relé. Cuando la humedad del suelo es inferior al 60\%, la bomba se activa automáticamente para suministrar agua al cultivo. Una vez que la humedad supera el 75\%, la bomba se desactiva, evitando el exceso de riego y optimizando el consumo de agua.
+
+Finalmente, el ESP32 sincroniza periódicamente toda la información con Firebase. Cada tres segundos se envían los valores de temperatura, humedad del aire, humedad del suelo y lectura analógica del sensor. Asimismo, cuando el sistema opera en modo automático, también se actualiza el estado de los actuadores para que la interfaz web refleje en tiempo real las acciones ejecutadas por el controlador.
+\subsubsection{Implementación de Firebase}
+La plataforma Firebase Realtime Database fue utilizada como sistema de almacenamiento y sincronización de datos en la nube, permitiendo la comunicación bidireccional entre el ESP32 y la aplicación web. Esta implementación facilita la supervisión remota del sistema de cultivo y la actualización de información en tiempo real desde cualquier dispositivo con acceso a Internet.
+
+La estructura de la base de datos fue organizada en diferentes nodos para separar las funciones de monitoreo, control y almacenamiento de información. El nodo \texttt{/sensores} almacena las variables adquiridas por los sensores instalados en el sistema, incluyendo la temperatura ambiente, la humedad relativa del aire, la humedad del suelo y el valor analógico leído por el convertidor ADC del ESP32. Estas variables son actualizadas periódicamente por el microcontrolador y constituyen la principal fuente de información para el monitoreo del cultivo.
+
+Por otra parte, el nodo \texttt{/actuadores} contiene el estado actual de los elementos de control del sistema. Dentro de este nodo se almacenan variables como el estado de la bomba de agua, el estado del techo automatizado y la posición del servomotor encargado de realizar la apertura y cierre de la estructura. Gracias a esta información, la interfaz web puede mostrar en tiempo real las acciones que está ejecutando el sistema.
+
+El nodo \texttt{/control} fue diseñado para gestionar los modos de operación de los actuadores. En este apartado se almacenan las configuraciones correspondientes al modo automático y manual de la bomba de agua y del techo automatizado. Cuando el usuario modifica alguno de estos parámetros desde la aplicación web, la información es enviada a Firebase y posteriormente recibida por el ESP32 mediante mecanismos de escucha en tiempo real.
+
+Adicionalmente, se implementó el nodo \texttt{/historial}, destinado al almacenamiento de registros históricos de las variables monitoreadas. Esta estructura permite conservar información relevante para futuros análisis del comportamiento ambiental del sistema y evaluar el desempeño del proceso de control implementado.
+
+Para garantizar una comunicación eficiente entre la aplicación web y el microcontrolador, se emplearon dos \textit{streams} de Firebase. El primero monitorea continuamente la ruta \texttt{/control}, permitiendo detectar cambios en los modos de operación seleccionados por el usuario. El segundo monitorea la ruta \texttt{/actuadores}, desde donde se reciben los comandos de activación y desactivación cuando el sistema opera en modo manual. Esta arquitectura permite que las acciones realizadas desde la interfaz web sean ejecutadas prácticamente en tiempo real por el ESP32.
+
+Durante el funcionamiento normal del sistema, el ESP32 realiza actualizaciones periódicas de la base de datos cada tres segundos. En cada actualización se transmiten las variables medidas por los sensores y, cuando el sistema opera en modo automático, también se actualiza el estado de los actuadores. De esta manera, Firebase actúa como un intermediario entre el hardware y la interfaz de usuario, garantizando la sincronización continua de la información y proporcionando una solución robusta para el monitoreo y control remoto del cultivo inteligente.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{images/Firebase.png}
+    \caption{Estructura de la base de datos implementada en Firebase Realtime Database.}
+    \label{fig:firebase}
+\end{figure}
+
+
+
+\subsubsection{Desarrollo de la aplicación web}
+
+La aplicación web fue desarrollada utilizando tecnologías estándar de desarrollo web como HTML, CSS y JavaScript. Su objetivo principal es proporcionar una interfaz intuitiva para la supervisión y control remoto del sistema de cultivo inteligente.
+
+La página permite visualizar en tiempo real las variables registradas por los sensores mediante indicadores numéricos y gráficos dinámicos. Para la representación gráfica de los datos históricos se empleó la librería Chart.js, la cual facilita el análisis del comportamiento de las variables ambientales a lo largo del tiempo.
+
+La comunicación entre la aplicación web y Firebase se realiza mediante la integración de los servicios de la plataforma, permitiendo que cualquier actualización en la base de datos se refleje instantáneamente en la interfaz. De esta forma, el usuario puede monitorear el estado del sistema desde cualquier dispositivo con acceso a Internet.
+
+Adicionalmente, la aplicación incorpora elementos de control que permiten modificar parámetros operativos y enviar comandos al ESP32. Esto proporciona una solución de monitoreo y control remoto centralizada, mejorando la accesibilidad y la gestión del sistema de cultivo inteligente.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{images/Pagina.png}
+    \caption{Muestra de la distribución final de la pagina}
+    \label{fig:firebase}
+\end{figure}
+
 \subsubsection{Historial de commits}
 
 % TODO: Completar contenido del Entregable 2.

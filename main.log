@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.13)  14 MAY 2026 11:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.13)  1 JUN 2026 22:13
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -661,7 +661,11 @@ Package: listings 2025/11/14 1.11b (Carsten Heinz)
 ex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count356
-) (main.aux)
+) (main.aux
+
+LaTeX Warning: Label `fig:firebase' multiply defined.
+
+)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
@@ -756,7 +760,7 @@ r/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
 
 pdfTeX warning: pdflatex.exe (file ./images/Diagramawhile.pdf): PDF inclusion: 
 found PDF version <1.7>, but at most version <1.5> allowed
-<images/Diagramawhile.pdf, id=285, 447.57211pt x 1159.33125pt>
+<images/Diagramawhile.pdf, id=297, 447.57211pt x 1159.33125pt>
 File: images/Diagramawhile.pdf Graphic file (type pdf)
 <use images/Diagramawhile.pdf>
 Package pdftex.def Info: images/Diagramawhile.pdf  used on input line 29.
@@ -806,13 +810,13 @@ t line 18.
 
 pdfTeX warning: pdflatex.exe (file ./images/Diagrama en blanco (3).pdf): PDF in
 clusion: found PDF version <1.7>, but at most version <1.5> allowed
-<images/Diagrama en blanco (3).pdf, id=328, 547.44528pt x 2231.33624pt>
+<images/Diagrama en blanco (3).pdf, id=340, 547.44528pt x 2231.33624pt>
 File: images/Diagrama en blanco (3).pdf Graphic file (type pdf)
 <use images/Diagrama en blanco (3).pdf>
 Package pdftex.def Info: images/Diagrama en blanco (3).pdf  used on input line 
 29.
 (pdftex.def)             Requested size: 154.80157pt x 630.93248pt.
-<images/Reto1.png, id=330, 722.7pt x 453.6147pt>
+<images/Reto1.png, id=342, 722.7pt x 453.6147pt>
 File: images/Reto1.png Graphic file (type png)
 <use images/Reto1.png>
 Package pdftex.def Info: images/Reto1.png  used on input line 49.
@@ -834,7 +838,7 @@ efined on input line 81.
 
 pdfTeX warning: pdflatex.exe (file ./images/Diagrama en blanco (1).pdf): PDF in
 clusion: found PDF version <1.7>, but at most version <1.5> allowed
-<images/Diagrama en blanco (1).pdf, id=420, 397.485pt x 1641.13126pt>
+<images/Diagrama en blanco (1).pdf, id=432, 397.485pt x 1641.13126pt>
 File: images/Diagrama en blanco (1).pdf Graphic file (type pdf)
 <use images/Diagrama en blanco (1).pdf>
 Package pdftex.def Info: images/Diagrama en blanco (1).pdf  used on input line 
@@ -853,7 +857,7 @@ put line 101.
 Package natbib Warning: Citation `espressif2021esp32' on page 6 undefined on in
 put line 101.
 
-<images/Reto2.png, id=460, 722.7pt x 530.9436pt>
+<images/Reto2.png, id=472, 722.7pt x 530.9436pt>
 File: images/Reto2.png Graphic file (type png)
 <use images/Reto2.png>
 Package pdftex.def Info: images/Reto2.png  used on input line 110.
@@ -866,7 +870,7 @@ put line 143.
 
 pdfTeX warning: pdflatex.exe (file ./images/Diagrama en blanco (2).pdf): PDF in
 clusion: found PDF version <1.7>, but at most version <1.5> allowed
-<images/Diagrama en blanco (2).pdf, id=463, 397.88649pt x 1885.0425pt>
+<images/Diagrama en blanco (2).pdf, id=475, 397.88649pt x 1885.0425pt>
 File: images/Diagrama en blanco (2).pdf Graphic file (type pdf)
 <use images/Diagrama en blanco (2).pdf>
 Package pdftex.def Info: images/Diagrama en blanco (2).pdf  used on input line 
@@ -881,7 +885,7 @@ Package natbib Warning: Citation `espressif2021esp32' on page 6 undefined on in
 put line 172.
 
 [6 <./images/Reto2.png (PNG copy)>]
-<images/Reto3.png, id=471, 722.7pt x 428.5611pt>
+<images/Reto3.png, id=483, 722.7pt x 428.5611pt>
 File: images/Reto3.png Graphic file (type png)
 <use images/Reto3.png>
 Package pdftex.def Info: images/Reto3.png  used on input line 178.
@@ -897,29 +901,47 @@ LaTeX Font Info:    Trying to load font information for T1+pcr on input line 44
  (C:\Users\Acer\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-<Diagrama_General.png, id=565, 1413.28pt x 770.88pt>
+<Diagrama_General.png, id=577, 1413.28pt x 770.88pt>
 File: Diagrama_General.png Graphic file (type png)
 <use Diagrama_General.png>
 Package pdftex.def Info: Diagrama_General.png  used on input line 457.
 (pdftex.def)             Requested size: 214.20154pt x 116.8268pt.
-<images/IMAGEN_CAD.png, id=568, 1321.93875pt x 1198.4775pt>
+<images/IMAGEN_CAD.png, id=580, 1321.93875pt x 1198.4775pt>
 File: images/IMAGEN_CAD.png Graphic file (type png)
 <use images/IMAGEN_CAD.png>
 Package pdftex.def Info: images/IMAGEN_CAD.png  used on input line 473.
 (pdftex.def)             Requested size: 214.20154pt x 194.19252pt.
-<Diagrama_flujo.png, id=570, 1413.28pt x 770.88pt>
+<Diagrama_flujo.png, id=582, 1413.28pt x 770.88pt>
 File: Diagrama_flujo.png Graphic file (type png)
 <use Diagrama_flujo.png>
 Package pdftex.def Info: Diagrama_flujo.png  used on input line 487.
 (pdftex.def)             Requested size: 214.20154pt x 116.8268pt.
-<images/Diagrama_general2.png, id=571, 1413.28pt x 770.88pt>
+<images/Diagrama_general2.png, id=583, 1413.28pt x 770.88pt>
 File: images/Diagrama_general2.png Graphic file (type png)
 <use images/Diagrama_general2.png>
 Package pdftex.def Info: images/Diagrama_general2.png  used on input line 502.
 (pdftex.def)             Requested size: 214.20154pt x 116.8268pt.
 [10 <./Diagrama_General.png> <./images/IMAGEN_CAD.png (PNG copy)> <./Diagrama_f
-lujo.png> <./images/Diagrama_general2.png>] (section/results.tex)
-(section/conclusions.tex) (section/acknoledgment.tex)
+lujo.png> <./images/Diagrama_general2.png>] [11]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 6
+20.
+
+(C:\Users\Acer\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+<images/Firebase.png, id=616, 1141.26375pt x 545.6385pt>
+File: images/Firebase.png Graphic file (type png)
+<use images/Firebase.png>
+Package pdftex.def Info: images/Firebase.png  used on input line 642.
+(pdftex.def)             Requested size: 252.0pt x 120.4821pt.
+
+[12]
+<images/Pagina.png, id=621, 1131.0255pt x 516.12825pt>
+File: images/Pagina.png Graphic file (type png)
+<use images/Pagina.png>
+Package pdftex.def Info: images/Pagina.png  used on input line 661.
+(pdftex.def)             Requested size: 252.0pt x 114.98978pt.
+ (section/results.tex) (section/conclusions.tex) (section/acknoledgment.tex)
 No file main.bbl.
 (section/Appendix.tex
 (C:\Users\Acer\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
@@ -934,8 +956,8 @@ nput line 9.
 (section/Anexos/Reto1.ino
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <5> not available
 (Font)              Font shape `T1/pcr/m/sl' tried instead on input line 2.
- [11]) (section/Anexos/Reto2.ino [12])
-(section/Anexos/Reto3.ino [13]))
+ [13 <./images/Firebase.png> <./images/Pagina.png>])
+(section/Anexos/Reto2.ino [14]) (section/Anexos/Reto3.ino))
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -950,29 +972,24 @@ Before submitting the final camera ready copy, remember to:
 
 Package natbib Warning: There were undefined citations.
 
-[14
-
-] (main.aux)
+[15] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 
 
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
+LaTeX Warning: There were multiply-defined labels.
 
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: B6BBC2808C078FE5E28B5A149409DEBD;11907
-(rerunfilecheck)             After:  16CC2C6F92EE9159CFAAB4A472818877;11841.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: C875800F4CA82D7159A4480E3B1BFC08;12470.
  ) 
 Here is how much of TeX's memory you used:
- 16791 strings out of 467871
- 262835 string characters out of 5418860
- 1287945 words of memory out of 5000000
- 44803 multiletter control sequences out of 15000+600000
- 743581 words of font info for 163 fonts, out of 8000000 for 9000
+ 16841 strings out of 467871
+ 263763 string characters out of 5418860
+ 1285533 words of memory out of 5000000
+ 44843 multiletter control sequences out of 15000+600000
+ 743895 words of font info for 164 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  80i,9n,82p,841b,2156s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/Acer/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
@@ -986,9 +1003,9 @@ type1/urw/times/utmb8a.pfb><C:/Users/Acer/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/urw/times/utmbi8a.pfb><C:/Users/Acer/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/urw/times/utmr8a.pfb><C:/Users/Acer/AppData/Local/Programs/MiKTeX/fonts/ty
 pe1/urw/times/utmri8a.pfb>
-Output written on main.pdf (14 pages, 6315285 bytes).
+Output written on main.pdf (15 pages, 6463656 bytes).
 PDF statistics:
- 1247 PDF objects out of 1440 (max. 8388607)
- 588 named destinations out of 1000 (max. 500000)
- 584 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1270 PDF objects out of 1440 (max. 8388607)
+ 594 named destinations out of 1000 (max. 500000)
+ 618 words of extra memory for PDF output out of 10000 (max. 10000000)
 
