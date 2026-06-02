@@ -667,6 +667,7 @@ Adicionalmente, la aplicación incorpora elementos de control que permiten modif
 
 % TODO: Completar contenido del Entregable 2.
 % Fin del bloque LaTeX para pegar
+
 \subsection{Pruebas de Sensores y Actuadores}
 
 \subsubsection{Prueba 1: Sensor DHT11}
@@ -763,6 +764,61 @@ Evaluar la respuesta del servomotor encargado de la apertura y cierre del techo 
 
 \textbf{Conclusión:}
 El sistema de ventilación automática funcionó correctamente durante todas las pruebas realizadas.
+
+\subsection{Problemas Encontrados Durante el Desarrollo}
+
+\subsubsection{Variabilidad en las lecturas del sensor de humedad}
+
+Durante las primeras pruebas se observaron fluctuaciones en los valores obtenidos por el sensor de humedad del suelo. Estas variaciones fueron ocasionadas por diferencias en la compactación del sustrato, profundidad de inserción del sensor y ruido eléctrico presente en la señal analógica.
+
+\textbf{Solución implementada:}
+\begin{itemize}
+    \item Calibración experimental del sensor.
+    \item Conversión de lecturas ADC a porcentaje de humedad.
+    \item Implementación de histéresis en el algoritmo de control.
+\end{itemize}
+
+\subsubsection{Oscilaciones del servomotor}
+
+Durante las pruebas iniciales el servomotor realizaba movimientos repetitivos cuando la temperatura se encontraba cerca del umbral de activación.
+
+\textbf{Solución implementada:}
+\begin{itemize}
+    \item Definición de umbrales independientes para apertura y cierre.
+    \item Implementación de banda de histéresis.
+\end{itemize}
+
+\subsubsection{Pérdidas temporales de conexión Wi-Fi}
+
+Se identificaron desconexiones ocasionales de la red inalámbrica que impedían la actualización inmediata de los datos en Firebase.
+
+\textbf{Solución implementada:}
+\begin{itemize}
+    \item Implementación de rutinas de reconexión automática.
+    \item Verificación periódica del estado de la conexión.
+\end{itemize}
+
+\subsubsection{Retrasos en la sincronización de la aplicación web}
+
+Las primeras versiones de la interfaz presentaban pequeños retardos entre la ejecución física y la actualización visual.
+
+\textbf{Solución implementada:}
+\begin{itemize}
+    \item Uso de Firebase Streams.
+    \item Optimización de la estructura de la base de datos.
+\end{itemize}
+
+\subsection{Lecciones Aprendidas}
+
+\begin{enumerate}
+    \item La calibración de sensores es indispensable para garantizar mediciones confiables.
+    \item La implementación de histéresis mejora significativamente la estabilidad de los sistemas de control.
+    \item La comunicación IoT requiere mecanismos de recuperación ante pérdidas de conectividad.
+    \item La modularización del software facilita el mantenimiento y la escalabilidad del sistema.
+    \item Firebase permite una sincronización eficiente entre hardware y aplicación web.
+    \item La validación individual de cada módulo simplifica la integración del sistema completo.
+    \item El desarrollo de soluciones IoT exige la integración coordinada de hardware, software y comunicaciones.
+\end{enumerate}
 
 \section{Resultados}\label{sec:resultados}
   \input{section/results}
