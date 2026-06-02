@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.13)  1 JUN 2026 22:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.13)  1 JUN 2026 23:00
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -981,8 +981,14 @@ L3 programming layer <2025-12-24>
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: C875800F4CA82D7159A4480E3B1BFC08;12470.
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: E4E74CD5D86ADB62C06B9C181E2184DF;12539
+(rerunfilecheck)             After:  C875800F4CA82D7159A4480E3B1BFC08;12470.
  ) 
 Here is how much of TeX's memory you used:
  16841 strings out of 467871
