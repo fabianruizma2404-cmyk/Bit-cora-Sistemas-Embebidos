@@ -667,7 +667,102 @@ Adicionalmente, la aplicación incorpora elementos de control que permiten modif
 
 % TODO: Completar contenido del Entregable 2.
 % Fin del bloque LaTeX para pegar
+\subsection{Pruebas de Sensores y Actuadores}
 
+\subsubsection{Prueba 1: Sensor DHT11}
+
+\textbf{Objetivo:}
+Verificar el correcto funcionamiento del sensor DHT11 y validar la lectura de temperatura y humedad relativa del aire.
+
+\textbf{Metodología:}
+\begin{enumerate}
+    \item Se conectó el sensor DHT11 al ESP32 mediante la librería DHT.
+    \item Se realizaron lecturas periódicas cada tres segundos.
+    \item Los datos fueron visualizados mediante el monitor serial y enviados a Firebase.
+    \item Se acercó una fuente de calor moderada para observar cambios en la temperatura medida.
+    \item Se generó vapor de agua a corta distancia para evaluar la respuesta de la medición de humedad.
+\end{enumerate}
+
+\textbf{Resultados obtenidos:}
+\begin{itemize}
+    \item El sensor respondió adecuadamente a las variaciones de temperatura.
+    \item Se observó un incremento gradual de la humedad relativa cuando se expuso al vapor de agua.
+    \item Las mediciones permanecieron estables durante la operación continua.
+\end{itemize}
+
+\textbf{Conclusión:}
+El sensor DHT11 presentó un comportamiento adecuado para las necesidades del sistema de monitoreo ambiental.
+
+\subsubsection{Prueba 2: Sensor de Humedad del Suelo}
+
+\textbf{Objetivo:}
+Evaluar la capacidad del sensor para identificar distintos niveles de humedad presentes en el sustrato.
+
+\textbf{Metodología:}
+\begin{enumerate}
+    \item Se conectó el sensor a una entrada ADC del ESP32.
+    \item Se realizaron mediciones en tres condiciones:
+    \begin{itemize}
+        \item Sensor en ambiente seco.
+        \item Sensor en suelo con humedad media.
+        \item Sensor en suelo completamente húmedo.
+    \end{itemize}
+    \item Los valores obtenidos fueron convertidos a porcentaje de humedad mediante la función de calibración implementada.
+\end{enumerate}
+
+\textbf{Resultados obtenidos:}
+\begin{itemize}
+    \item Los valores variaron de forma consistente con las condiciones del suelo.
+    \item Se observó una clara diferencia entre suelo seco, húmedo y saturado.
+    \item El sensor permitió establecer umbrales confiables para el control automático del riego.
+\end{itemize}
+
+\textbf{Conclusión:}
+El sensor de humedad del suelo permitió determinar correctamente el estado hídrico del cultivo y suministrar información confiable para la activación automática del sistema de riego.
+
+\subsubsection{Prueba 3: Sistema de Riego Automático}
+
+\textbf{Objetivo:}
+Verificar el funcionamiento de la bomba de agua y el relé de control.
+
+\textbf{Metodología:}
+\begin{enumerate}
+    \item Se simuló una condición de baja humedad del suelo.
+    \item Se observó la activación automática del relé.
+    \item Se verificó el funcionamiento de la bomba durante el tiempo programado.
+\end{enumerate}
+
+\textbf{Resultados obtenidos:}
+\begin{itemize}
+    \item La bomba se activó cuando la humedad fue inferior al umbral definido.
+    \item El sistema desactivó automáticamente el riego al alcanzar el nivel adecuado.
+    \item No se observaron activaciones erráticas durante las pruebas.
+\end{itemize}
+
+\textbf{Conclusión:}
+El sistema de riego cumplió satisfactoriamente con los criterios de control establecidos.
+
+\subsubsection{Prueba 4: Sistema de Apertura Automática del Techo}
+
+\textbf{Objetivo:}
+Evaluar la respuesta del servomotor encargado de la apertura y cierre del techo automatizado.
+
+\textbf{Metodología:}
+\begin{enumerate}
+    \item Se modificaron las variables ambientales para simular condiciones críticas.
+    \item Se verificó la apertura automática del techo.
+    \item Posteriormente se restablecieron las condiciones normales para observar el cierre automático.
+\end{enumerate}
+
+\textbf{Resultados obtenidos:}
+\begin{itemize}
+    \item El servomotor respondió correctamente a las órdenes de control.
+    \item El techo se abrió y cerró según las condiciones programadas.
+    \item La histéresis evitó movimientos repetitivos del actuador.
+\end{itemize}
+
+\textbf{Conclusión:}
+El sistema de ventilación automática funcionó correctamente durante todas las pruebas realizadas.
 
 \section{Resultados}\label{sec:resultados}
   \input{section/results}
